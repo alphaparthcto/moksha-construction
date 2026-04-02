@@ -75,7 +75,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- H1 -->
     <h1 class="font-[var(--font-display)] text-[length:var(--text-hero)] font-extrabold tracking-tight leading-[1.05] max-w-4xl mb-6 reveal reveal-delay-1">
       We Don't Just Build Structures.<br>
-      <span class="text-accent-400">We Build Legacies.</span>
+      <em class="font-accent not-italic text-accent-400">We Build Legacies.</em>
     </h1>
 
     <!-- Subhead -->
@@ -530,67 +530,51 @@ require_once __DIR__ . '/includes/header.php';
 
 
 <!-- ============================================================
-     SECTION 8: TEAM / LEADERSHIP — Parth Patel card
+     SECTION 8: OUR TEAM
 ============================================================ -->
-<section class="py-[var(--section-y)]" aria-labelledby="leadership-heading">
+<section class="py-[var(--section-y)]" aria-labelledby="team-heading">
   <div class="max-w-[var(--container)] mx-auto px-6">
 
-    <!-- Section Header -->
-    <div class="text-center mb-12">
-      <p class="section-label reveal">LEADERSHIP</p>
-      <h2 id="leadership-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
-        Meet the Builder Behind the Brand
+    <div class="text-center mb-14 reveal">
+      <p class="section-label">OUR TEAM</p>
+      <h2 id="team-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
+        The People Behind<br>
+        <em class="font-accent not-italic text-accent-400">Every Project</em>
       </h2>
     </div>
 
-    <!-- Leadership Card -->
-    <div class="card max-w-4xl mx-auto overflow-hidden reveal reveal-delay-2">
-      <div class="grid grid-cols-1 md:grid-cols-5">
+    <?php
+    $team = [
+        ['name' => 'Rakesh Patel',  'role' => 'Chief Executive Officer', 'initials' => 'RP', 'image' => '/assets/images/team/rakesh-patel.jpg',     'bio' => 'Visionary leader with decades of experience in construction and real estate development across the Southeast.'],
+        ['name' => 'Parth Patel',   'role' => 'Sr. Project Manager',     'initials' => 'PP', 'image' => '/assets/images/team/parth-patel.jpg',      'bio' => 'Manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.'],
+        ['name' => 'Hari Patel',    'role' => 'Jr. Project Manager',     'initials' => 'HP', 'image' => '/assets/images/team/hari-patel.jpg',       'bio' => 'Coordinates day-to-day site operations, subcontractor scheduling, and quality control.'],
+        ['name' => 'Parth Patel',   'role' => 'Technology Integrator',   'initials' => 'PP', 'image' => '/assets/images/team/parth-patel-tech.jpg', 'bio' => 'Bridges construction and technology — BIM workflows, project management systems, and digital tools.'],
+    ];
+    ?>
 
-        <!-- Photo Column -->
-        <div class="md:col-span-2 relative min-h-[320px] md:min-h-0">
-          <!-- Gold left accent border -->
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-accent-400 z-10 hidden md:block" aria-hidden="true"></div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <?php foreach ($team as $i => $member): ?>
+      <div class="card p-0 overflow-hidden group reveal <?= $i > 0 ? 'reveal-delay-' . min($i, 3) : '' ?>">
+        <div class="relative aspect-[3/4] bg-gradient-to-br from-brand-900 to-brand-700 overflow-hidden">
           <img
-            src="/assets/images/team/parth-patel.jpg"
-            alt="Parth Patel, Managing Director of Moksha Construction"
+            src="<?= htmlspecialchars($member['image']) ?>"
+            alt="<?= htmlspecialchars($member['name']) ?>, <?= htmlspecialchars($member['role']) ?> at Moksha Construction"
+            class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
-            width="600"
-            height="750"
-            class="w-full h-full object-cover object-top"
+            onerror="this.style.display='none'"
           >
-          <!-- Subtle gradient for readability on mobile -->
-          <div class="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent md:hidden" aria-hidden="true"></div>
-        </div>
-
-        <!-- Bio Column -->
-        <div class="md:col-span-3 p-8 lg:p-12 flex flex-col justify-center">
-          <div class="mb-6">
-            <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-1">Parth Patel</h3>
-            <p class="text-accent-400 font-semibold text-sm tracking-wide uppercase">Managing Director</p>
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span class="text-6xl font-bold text-accent-400 opacity-30 select-none"><?= $member['initials'] ?></span>
           </div>
-
-          <p class="text-text-2 leading-relaxed mb-5">
-            Parth Patel founded Moksha Construction on a simple belief: every structure should outlast the generation that built it. From custom residential homes to large-scale commercial projects, Parth leads a team that turns blueprints into landmarks — with an unwavering commitment to quality, transparency, and client trust.
-          </p>
-          <p class="text-text-2 leading-relaxed mb-8">
-            Under Parth's leadership, Moksha Construction has grown from a Clarksville-based firm into a multi-state operation with offices in Nashville and Atlanta, delivering projects across Tennessee, Texas, North Carolina, and beyond.
-          </p>
-
-          <!-- Signature -->
-          <div>
-            <img
-              src="/assets/images/team/parth-signature.svg"
-              alt="Parth Patel signature"
-              loading="lazy"
-              width="180"
-              height="60"
-              class="h-12 w-auto opacity-70"
-            >
-          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-void/80 to-transparent"></div>
         </div>
-
+        <div class="p-6">
+          <p class="text-xs font-semibold text-accent-400 uppercase tracking-widest mb-1.5"><?= htmlspecialchars($member['role']) ?></p>
+          <h3 class="text-[length:var(--text-h3)] font-bold tracking-tight mb-3"><?= htmlspecialchars($member['name']) ?></h3>
+          <p class="text-sm text-text-2 leading-relaxed"><?= htmlspecialchars($member['bio']) ?></p>
+        </div>
       </div>
+      <?php endforeach; ?>
     </div>
 
   </div>

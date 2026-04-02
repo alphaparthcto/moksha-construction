@@ -60,6 +60,13 @@ $img_stmt = $db->prepare(
 $img_stmt->execute([$project['id']]);
 $gallery_images = $img_stmt->fetchAll();
 
+// ── Fetch project videos ─────────────────────────────────────────
+$vid_stmt = $db->prepare(
+    'SELECT * FROM project_videos WHERE project_id = ? ORDER BY sort_order ASC, id ASC'
+);
+$vid_stmt->execute([$project['id']]);
+$project_videos = $vid_stmt->fetchAll();
+
 // ── Fetch related projects (same type, excluding this one) ─
 $rel_stmt = $db->prepare(
     'SELECT * FROM projects
@@ -418,6 +425,78 @@ require_once __DIR__ . '/includes/header.php';
       </div>
     </div><!-- /lightbox -->
 
+  </section>
+  <?php endif; ?>
+
+  <!-- ============================================================
+       PROJECT VIDEOS — only shown if videos exist
+  ============================================================ -->
+  <?php if (!empty($project_videos)): ?>
+  <section class="py-(--section-y)">
+    <div class="max-w-[var(--container)] mx-auto px-6">
+
+      <p class="section-label reveal">VIDEO</p>
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight mb-10 reveal reveal-delay-1">
+        Project <em class="font-accent not-italic text-accent-400">in Motion</em>
+      </h2>
+
+      <div class="grid grid-cols-1 <?= count($project_videos) > 1 ? 'lg:grid-cols-2' : 'max-w-4xl mx-auto' ?> gap-6">
+        <?php foreach ($project_videos as $vi => $video): ?>
+          <div class="rounded-2xl overflow-hidden bg-raised border border-[oklch(100%_0_0/0.07)] reveal <?= $vi > 0 ? 'reveal-delay-' . min($vi, 2) : '' ?>">
+            <?php if ($video['video_type'] === 'upload' && !empty($video['video_path'])): ?>
+              <video
+                controls
+                preload="metadata"
+                class="w-full aspect-video bg-black"
+                <?= !empty($video['title']) ? 'title="' . htmlspecialchars($video['title']) . '"' : '' ?>
+              >
+                <source src="<?= htmlspecialchars($video['video_path']) ?>" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            <?php elseif ($video['video_type'] === 'youtube' && !empty($video['video_url'])): ?>
+              <?php
+                preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/', $video['video_url'], $ytMatch);
+                $ytId = $ytMatch[1] ?? '';
+              ?>
+              <?php if ($ytId): ?>
+                <iframe
+                  src="https://www.youtube.com/embed/<?= htmlspecialchars($ytId) ?>?rel=0"
+                  class="w-full aspect-video"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                  loading="lazy"
+                  <?= !empty($video['title']) ? 'title="' . htmlspecialchars($video['title']) . '"' : 'title="Project video"' ?>
+                ></iframe>
+              <?php endif; ?>
+            <?php elseif ($video['video_type'] === 'vimeo' && !empty($video['video_url'])): ?>
+              <?php
+                preg_match('/vimeo\.com\/(\d+)/', $video['video_url'], $vmMatch);
+                $vmId = $vmMatch[1] ?? '';
+              ?>
+              <?php if ($vmId): ?>
+                <iframe
+                  src="https://player.vimeo.com/video/<?= htmlspecialchars($vmId) ?>?dnt=1"
+                  class="w-full aspect-video"
+                  frameborder="0"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                  loading="lazy"
+                  <?= !empty($video['title']) ? 'title="' . htmlspecialchars($video['title']) . '"' : 'title="Project video"' ?>
+                ></iframe>
+              <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if (!empty($video['title'])): ?>
+              <div class="p-4">
+                <p class="text-sm font-medium text-text-2"><?= htmlspecialchars($video['title']) ?></p>
+              </div>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      </div>
+
+    </div>
   </section>
   <?php endif; ?>
 

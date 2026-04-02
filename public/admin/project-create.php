@@ -41,7 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $type        = trim($_POST['type']        ?? '');
     $size        = trim($_POST['size']        ?? '');
     $location    = trim($_POST['location']    ?? '');
-    $year        = (int)($_POST['year']       ?? date('Y'));
+    $yearRaw     = trim($_POST['year'] ?? '');
+    $year        = $yearRaw !== '' ? (int)$yearRaw : null;
     $description = trim($_POST['description'] ?? '');
     $status      = trim($_POST['status']      ?? 'draft');
 
@@ -62,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $status = 'draft';
     }
 
-    $year = ($year >= 1900 && $year <= (int)date('Y') + 5) ? $year : (int)date('Y');
+    if ($year !== null) {
+        $year = ($year >= 1900 && $year <= (int)date('Y') + 5) ? $year : null;
+    }
 
     // --- Generate / validate slug ---
     $slug = $slug !== '' ? generateSlug($slug) : generateSlug($title);
@@ -212,7 +215,7 @@ $old = array_merge([
     'type'        => '',
     'size'        => '',
     'location'    => '',
-    'year'        => (int)date('Y'),
+    'year'        => '',
     'description' => '',
     'status'      => 'draft',
 ], $old);
@@ -395,7 +398,7 @@ require_once __DIR__ . '/includes/admin-header.php';
 
           <!-- Year -->
           <div class="form-group" style="max-width:160px;margin-top:1rem;">
-            <label class="form-label" for="year">Year Completed</label>
+            <label class="form-label" for="year">Year Completed <span style="font-weight:400;color:var(--text-3)">(optional)</span></label>
             <input
               type="number"
               id="year"
@@ -420,15 +423,11 @@ require_once __DIR__ . '/includes/admin-header.php';
           <div class="form-group" style="margin-bottom:0">
             <label class="form-label" for="description">
               Project Description
-              <span style="font-weight:400;color:var(--text-3);margin-left:.25rem;">Plain text or basic HTML</span>
             </label>
             <textarea
               id="description"
               name="description"
-              class="form-textarea"
-              rows="10"
-              style="min-height:240px;"
-              placeholder="Describe the project scope, materials, unique challenges, and outcome…"
+              style="min-height:300px;visibility:hidden;"
             ><?= e($old['description']) ?></textarea>
           </div>
         </div>

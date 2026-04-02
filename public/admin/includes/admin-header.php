@@ -11,6 +11,7 @@ $admin_username = $_SESSION['user_email'] ?? 'Admin';
 
 $nav_items = [
     'dashboard'   => ['label' => 'Dashboard',   'href' => '/admin/',                'icon' => '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'],
+    'projects'    => ['label' => 'Projects',     'href' => '/admin/projects.php',    'icon' => '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'],
     'submissions' => ['label' => 'Submissions',  'href' => '/admin/submissions.php', 'icon' => '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/>'],
     'activity'    => ['label' => 'Activity Log', 'href' => '/admin/activity.php',    'icon' => '<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>'],
 ];
