@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/includes/db.php';
+
 $page_title       = 'Our Projects | Moksha Construction Portfolio | Clarksville & Nashville, TN';
 $page_description = 'View Moksha Construction\'s project portfolio — from 280,000 sq ft exhibition centers to luxury hotels and apartment complexes. See our work across Tennessee and the Southeast.';
 $page_url         = '/projects';
@@ -8,6 +10,10 @@ $breadcrumbs = [
     ['name' => 'Home', 'url' => '/'],
     ['name' => 'Projects'],
 ];
+
+$stmt     = $db->query('SELECT * FROM projects WHERE status = "published" ORDER BY sort_order ASC, created_at DESC');
+$projects = $stmt->fetchAll();
+$types    = array_unique(array_column($projects, 'type'));
 
 require_once __DIR__ . '/includes/header.php';
 ?>
@@ -41,11 +47,11 @@ require_once __DIR__ . '/includes/header.php';
 
     <div class="relative max-w-[var(--container)] mx-auto px-6">
       <p class="section-label reveal">OUR PORTFOLIO</p>
-      <h1 class="text-(--text-hero) font-bold tracking-tight mb-6 reveal reveal-delay-1">
+      <h1 class="text-[length:var(--text-hero)] font-bold tracking-tight mb-6 reveal reveal-delay-1">
         Our Work Speaks<br>
         <em class="font-accent not-italic text-accent-400">for Itself</em>
       </h1>
-      <p class="text-(--text-body-lg) text-text-2 max-w-2xl reveal reveal-delay-2">
+      <p class="text-[length:var(--text-body-lg)] text-text-2 max-w-2xl reveal reveal-delay-2">
         Hotels, exhibition centers, office buildings, retail spaces, and residential complexes — built by Moksha Construction across Tennessee and the Southeast.
       </p>
     </div>
@@ -72,167 +78,59 @@ require_once __DIR__ . '/includes/header.php';
         </template>
       </div>
 
+      <?php if (empty($projects)): ?>
+
+      <!-- Empty state: no projects in DB yet -->
+      <div class="text-center py-20">
+        <p class="text-text-3 text-[length:var(--text-body-lg)]">Projects coming soon.</p>
+      </div>
+
+      <?php else: ?>
+
       <!-- Project Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <!-- Project 1: Exhibition Center -->
+        <?php foreach ($projects as $i => $project):
+          $isLast     = $i === count($projects) - 1;
+          $isOddTotal = count($projects) % 2 !== 0;
+          $isWide     = $isLast && $isOddTotal;
+        ?>
         <div
-          class="project-card"
-          data-type="commercial"
-          x-show="activeFilter === 'all' || activeFilter === 'commercial'"
+          class="project-card <?= $isWide ? 'md:col-span-2' : '' ?>"
+          data-type="<?= htmlspecialchars($project['type']) ?>"
+          x-show="activeFilter === 'all' || activeFilter === <?= json_encode($project['type']) ?>"
           x-transition:enter="transition ease-out duration-400"
           x-transition:enter-start="opacity-0 scale-95"
           x-transition:enter-end="opacity-100 scale-100"
           x-transition:leave="transition ease-in duration-200"
           x-transition:leave-start="opacity-100 scale-100"
           x-transition:leave-end="opacity-0 scale-95"
-          style="aspect-ratio: 4/3;"
+          style="aspect-ratio: <?= $isWide ? '21/9' : '4/3' ?>;"
         >
-          <img
-            src="/assets/images/projects/exhibition/main.png"
-            alt="Expansive Exhibition Center — 280,000 sq ft multi-purpose venue in Clarksville, TN"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          >
-          <span class="project-badge">Commercial</span>
-          <div class="project-card-overlay">
-            <h2 class="text-(--text-h3) font-bold text-text mb-1">Expansive Exhibition Center</h2>
-            <p class="text-sm text-text-3 mb-3">280,000 sq ft &middot; Clarksville, TN</p>
-            <p class="text-sm text-text-2 leading-relaxed opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 max-w-lg">
-              A sprawling multi-purpose hub for trade shows, conventions, cultural gatherings, and large-scale events. State-of-the-art amenities with flexible layouts designed for maximum versatility.
-            </p>
-          </div>
+          <a href="/projects/<?= htmlspecialchars($project['slug']) ?>" class="block w-full h-full">
+            <img
+              src="<?= htmlspecialchars($project['featured_image'] ?? '/assets/images/projects/placeholder.jpg') ?>"
+              alt="<?= htmlspecialchars($project['title']) ?> — <?= htmlspecialchars($project['size'] ?? '') ?> <?= htmlspecialchars($project['type']) ?> project<?= $project['location'] ? ' in ' . htmlspecialchars($project['location']) : '' ?>"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            >
+            <span class="project-badge"><?= htmlspecialchars(ucfirst($project['type'])) ?></span>
+            <div class="project-card-overlay">
+              <h2 class="text-[length:var(--text-h3)] font-bold text-text mb-1"><?= htmlspecialchars($project['title']) ?></h2>
+              <p class="text-sm text-text-3 mb-3">
+                <?= $project['size'] ? htmlspecialchars($project['size']) . ' &middot; ' : '' ?><?= htmlspecialchars($project['location'] ?? '') ?>
+              </p>
+              <p class="text-sm text-text-2 leading-relaxed opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 max-w-lg">
+                <?= htmlspecialchars(mb_substr(strip_tags($project['description'] ?? ''), 0, 200)) ?>
+              </p>
+            </div>
+          </a>
         </div>
-
-        <!-- Project 2: Office Building -->
-        <div
-          class="project-card"
-          data-type="commercial"
-          x-show="activeFilter === 'all' || activeFilter === 'commercial'"
-          x-transition:enter="transition ease-out duration-400"
-          x-transition:enter-start="opacity-0 scale-95"
-          x-transition:enter-end="opacity-100 scale-100"
-          x-transition:leave="transition ease-in duration-200"
-          x-transition:leave-start="opacity-100 scale-100"
-          x-transition:leave-end="opacity-0 scale-95"
-          style="aspect-ratio: 4/3;"
-        >
-          <img
-            src="/assets/images/projects/office/main.png"
-            alt="Versatile Office Building — 200,000 sq ft landmark office with live sound studio, theaters, and cafe"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          >
-          <span class="project-badge">Commercial</span>
-          <div class="project-card-overlay">
-            <h2 class="text-(--text-h3) font-bold text-text mb-1">Versatile Office Building</h2>
-            <p class="text-sm text-text-3 mb-3">200,000 sq ft &middot; Tennessee</p>
-            <p class="text-sm text-text-2 leading-relaxed max-w-lg">
-              A landmark office building featuring an integrated live sound studio, multiple presentation theaters, and a two-story cafe — redefining the modern workplace with seamless multi-use functionality.
-            </p>
-          </div>
-        </div>
-
-        <!-- Project 3: Hotel -->
-        <div
-          class="project-card"
-          data-type="hospitality"
-          x-show="activeFilter === 'all' || activeFilter === 'hospitality'"
-          x-transition:enter="transition ease-out duration-400"
-          x-transition:enter-start="opacity-0 scale-95"
-          x-transition:enter-end="opacity-100 scale-100"
-          x-transition:leave="transition ease-in duration-200"
-          x-transition:leave-start="opacity-100 scale-100"
-          x-transition:leave-end="opacity-0 scale-95"
-          style="aspect-ratio: 4/3;"
-        >
-          <img
-            src="/assets/images/projects/hotel/main.png"
-            alt="Luxurious Hotel of Distinction — 90 room suites in Clarksville, TN"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          >
-          <span class="project-badge">Hospitality</span>
-          <div class="project-card-overlay">
-            <h2 class="text-(--text-h3) font-bold text-text mb-1">Luxurious Hotel of Distinction</h2>
-            <p class="text-sm text-text-3 mb-3">90 Room Suites &middot; Clarksville, TN</p>
-            <p class="text-sm text-text-2 leading-relaxed max-w-lg">
-              An upscale hospitality venue featuring 90 luxurious room suites with world-class amenities and personalized services. Every detail crafted to deliver the ultimate guest experience.
-            </p>
-          </div>
-        </div>
-
-        <!-- Project 4: Lotus Villa Apartments -->
-        <div
-          class="project-card"
-          data-type="residential"
-          x-show="activeFilter === 'all' || activeFilter === 'residential'"
-          x-transition:enter="transition ease-out duration-400"
-          x-transition:enter-start="opacity-0 scale-95"
-          x-transition:enter-end="opacity-100 scale-100"
-          x-transition:leave="transition ease-in duration-200"
-          x-transition:leave-start="opacity-100 scale-100"
-          x-transition:leave-end="opacity-0 scale-95"
-          style="aspect-ratio: 4/3;"
-        >
-          <img
-            src="/assets/images/projects/apartments/drone-1.jpg"
-            alt="Lotus Villa Apartments — 64-unit ground-up apartment complex in Tennessee"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          >
-          <span class="project-badge">Residential</span>
-          <div class="project-card-overlay">
-            <h2 class="text-(--text-h3) font-bold text-text mb-1">Lotus Villa Apartments</h2>
-            <p class="text-sm text-text-3 mb-3">64 Units &middot; Tennessee</p>
-            <p class="text-sm text-text-2 leading-relaxed max-w-lg">
-              A ground-up apartment complex featuring contemporary architectural design, spacious units, a fitness center, communal gathering spaces, and landscaped green areas — built for modern community living.
-            </p>
-          </div>
-        </div>
-
-        <!-- Project 5: Retail Center — spans full width -->
-        <div
-          class="project-card md:col-span-2"
-          data-type="commercial"
-          x-show="activeFilter === 'all' || activeFilter === 'commercial'"
-          x-transition:enter="transition ease-out duration-400"
-          x-transition:enter-start="opacity-0 scale-95"
-          x-transition:enter-end="opacity-100 scale-100"
-          x-transition:leave="transition ease-in duration-200"
-          x-transition:leave-start="opacity-100 scale-100"
-          x-transition:leave-end="opacity-0 scale-95"
-          style="aspect-ratio: 21/9;"
-        >
-          <img
-            src="/assets/images/projects/retail/photo-1.jpg"
-            alt="Commercial Retail Center — 10,000 sq ft ground-up retail space in Tennessee"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          >
-          <span class="project-badge">Commercial</span>
-          <div class="project-card-overlay">
-            <h2 class="text-(--text-h3) font-bold text-text mb-1">Commercial Retail Center</h2>
-            <p class="text-sm text-text-3 mb-3">10,000 sq ft &middot; Tennessee</p>
-            <p class="text-sm text-text-2 leading-relaxed max-w-2xl">
-              A ground-up retail center optimizing every square foot for functionality and visual appeal. Innovative design blended with practical commercial considerations — built to attract and serve customers from day one.
-            </p>
-          </div>
-        </div>
+        <?php endforeach; ?>
 
       </div><!-- /grid -->
 
-      <!-- Empty state (when filter yields no matches) -->
-      <div
-        x-show="activeFilter === 'industrial'"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        class="text-center py-20"
-      >
-        <p class="text-text-3 text-(--text-body-lg)">Industrial projects coming soon.</p>
-        <a href="/contact#quote" class="btn-primary mt-6 inline-flex">Discuss Your Project</a>
-      </div>
+      <?php endif; ?>
 
     </div><!-- /container -->
   </section>
@@ -248,10 +146,9 @@ function projectFilter() {
     activeFilter: 'all',
     filters: [
       { label: 'All Projects', value: 'all' },
-      { label: 'Commercial',   value: 'commercial' },
-      { label: 'Residential',  value: 'residential' },
-      { label: 'Hospitality',  value: 'hospitality' },
-      { label: 'Industrial',   value: 'industrial' },
+      <?php foreach ($types as $type): ?>
+      { label: <?= json_encode(ucfirst($type)) ?>, value: <?= json_encode($type) ?> },
+      <?php endforeach; ?>
     ],
   };
 }

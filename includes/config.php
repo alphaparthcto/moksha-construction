@@ -37,5 +37,11 @@ define('SOCIAL_LINKEDIN', 'https://linkedin.com/company/moksha-construction');
 // Google Apps Script form endpoint (update with real URL)
 define('FORM_ENDPOINT', 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec');
 
+// Database
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'parths5_moksha');
+define('DB_USER', 'parths5_moksha');
+define('DB_PASS', '95GAsiK4ghpaMoJ8oHql');
+
 // Asset versioning for cache busting
-define('ASSET_VERSION', '1.0.0');
+define('ASSET_VERSION', '1.0.3');

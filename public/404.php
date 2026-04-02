@@ -21,12 +21,12 @@ require_once __DIR__ . '/includes/header.php';
     <div class="w-16 h-px bg-accent-400 mx-auto mb-8 opacity-60"></div>
 
     <!-- Headline -->
-    <h1 class="text-[var(--text-h2)] font-display font-bold text-text mb-4">
+    <h1 class="text-[length:var(--text-h2)] font-display font-bold text-text mb-4">
       This Page Doesn't Exist
     </h1>
 
     <!-- Subtext -->
-    <p class="text-text-2 text-[var(--text-body-lg)] leading-relaxed mb-10 max-w-md mx-auto">
+    <p class="text-text-2 text-[length:var(--text-body-lg)] leading-relaxed mb-10 max-w-md mx-auto">
       The page you're looking for may have been moved, deleted, or never existed.
     </p>
 

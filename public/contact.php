@@ -41,11 +41,11 @@ require_once __DIR__ . '/includes/header.php';
 
     <div class="relative max-w-[var(--container)] mx-auto px-6">
       <p class="section-label reveal">GET IN TOUCH</p>
-      <h1 class="text-(--text-display) font-bold tracking-tight mb-4 reveal reveal-delay-1">
+      <h1 class="text-[length:var(--text-display)] font-bold tracking-tight mb-4 reveal reveal-delay-1">
         Let's Build Something<br>
         <em class="font-accent not-italic text-accent-400">Together</em>
       </h1>
-      <p class="text-(--text-body-lg) text-text-2 reveal reveal-delay-2">
+      <p class="text-[length:var(--text-body-lg)] text-text-2 reveal reveal-delay-2">
         Free estimates. No obligation. We respond within 48 hours.
       </p>
     </div>
@@ -61,7 +61,7 @@ require_once __DIR__ . '/includes/header.php';
         <!-- LEFT: Quote Form (60% → 3/5 cols) -->
         <div class="lg:col-span-3 reveal" x-data="contactForm()">
 
-          <h2 class="text-(--text-h2) font-bold tracking-tight mb-2">Request a Free Quote</h2>
+          <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight mb-2">Request a Free Quote</h2>
           <p class="text-text-2 mb-8">Tell us about your project. The more detail you share, the better we can prepare for your first conversation.</p>
 
           <!-- Success State -->
@@ -78,7 +78,7 @@ require_once __DIR__ . '/includes/header.php';
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
               </svg>
             </div>
-            <h3 class="text-(--text-h3) font-bold mb-2">Request Received</h3>
+            <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Request Received</h3>
             <p class="text-text-2 text-sm leading-relaxed max-w-sm mx-auto">
               Thank you! We've received your quote request and will respond within 48 hours. If your project is urgent, call us directly at <a href="tel:<?= SITE_PHONE_RAW ?>" class="text-accent-400 hover:text-accent-300 transition-colors"><?= SITE_PHONE ?></a>.
             </p>
@@ -296,7 +296,7 @@ require_once __DIR__ . '/includes/header.php';
         <!-- RIGHT: Contact Info (40% → 2/5 cols) -->
         <div class="lg:col-span-2 space-y-4 reveal reveal-delay-2">
 
-          <h2 class="text-(--text-h3) font-bold tracking-tight mb-6">Contact Information</h2>
+          <h2 class="text-[length:var(--text-h3)] font-bold tracking-tight mb-6">Contact Information</h2>
 
           <!-- Call Us -->
           <div class="card p-6">
@@ -491,16 +491,17 @@ function contactForm() {
         payload.append('source', 'website-contact');
         payload.append('submitted_at', new Date().toISOString());
 
-        const res = await fetch('<?= FORM_ENDPOINT ?>', {
+        const res = await fetch('/api/contact.php', {
           method:   'POST',
           body:     payload,
           redirect: 'follow',
         });
 
-        if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
           this.submitted = true;
         } else {
-          this.submitError = 'Something went wrong. Please try again or call us directly at <?= SITE_PHONE ?>.';
+          this.submitError = data.error || 'Something went wrong. Please try again or call us directly at <?= SITE_PHONE ?>.';
         }
       } catch (err) {
         this.submitError = 'Unable to send your request. Please call us at <?= SITE_PHONE ?> or email <?= SITE_EMAIL ?>.';

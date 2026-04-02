@@ -6,10 +6,10 @@
   <div class="absolute inset-0 bg-gradient-to-t from-base/80 to-transparent"></div>
 
   <div class="relative max-w-[var(--container)] mx-auto px-6 text-center">
-    <h2 class="text-(--text-display) font-bold tracking-tight mb-4 reveal">
+    <h2 class="text-[length:var(--text-display)] font-bold tracking-tight mb-4 reveal">
       Ready to Build Something Extraordinary?
     </h2>
-    <p class="text-(--text-body-lg) text-text-2 max-w-xl mx-auto mb-8 reveal reveal-delay-1">
+    <p class="text-[length:var(--text-body-lg)] text-text-2 max-w-xl mx-auto mb-8 reveal reveal-delay-1">
       Tell us about your project. We'll have a proposal in your inbox within 48 hours.
     </p>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal reveal-delay-2">

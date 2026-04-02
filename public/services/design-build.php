@@ -71,12 +71,12 @@ require_once __DIR__ . '/../includes/header.php';
     <p class="section-label reveal">OUR SERVICES</p>
 
     <!-- H1 -->
-    <h1 class="text-(--text-hero) font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
+    <h1 class="text-[length:var(--text-hero)] font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
       Design &amp; Build. One Team. One Vision.
     </h1>
 
     <!-- Subtext -->
-    <p class="text-(--text-body-lg) text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
+    <p class="text-[length:var(--text-body-lg)] text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
       From concept sketch to certificate of occupancy — seamless execution under one roof.
     </p>
 
@@ -98,10 +98,10 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Left: copy (60%) -->
       <div class="lg:col-span-3 reveal">
         <p class="section-label">THE DESIGN-BUILD ADVANTAGE</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Design and Construction, United
         </h2>
-        <div class="space-y-5 text-text-2 text-(--text-body-lg) leading-relaxed">
+        <div class="space-y-5 text-text-2 text-[length:var(--text-body-lg)] leading-relaxed">
           <p>
             Design-build eliminates the friction between architects and builders by uniting them under one contract and one accountability structure. At Moksha Construction, our architects, designers, and builders collaborate from day one — ensuring that what gets designed can actually get built, on time and within your budget.
           </p>
@@ -114,7 +114,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Right: quick facts card (40%) -->
       <aside class="lg:col-span-2 reveal reveal-delay-2">
         <div class="card p-8 border-t-[3px] border-t-accent-400">
-          <h3 class="text-(--text-h3) font-bold text-text mb-6">By the Numbers</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-6">By the Numbers</h3>
           <ul class="space-y-4">
             <li class="flex items-start gap-3">
               <span class="mt-1 w-5 h-5 rounded-full bg-accent-400/15 flex items-center justify-center shrink-0">
@@ -163,7 +163,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">WHY DESIGN-BUILD</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         The Integrated Advantage
       </h2>
       <p class="text-text-2 mt-4 reveal reveal-delay-2">
@@ -180,7 +180,7 @@ require_once __DIR__ . '/../includes/header.php';
             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
           </svg>
         </div>
-        <h3 class="text-(--text-h3) font-bold text-text mb-3">Single Point of Accountability</h3>
+        <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Single Point of Accountability</h3>
         <p class="text-text-2 leading-relaxed">
           One contract. One team. One phone call when you have a question. Design-build eliminates the finger-pointing between designers and contractors that plagues traditional delivery methods.
         </p>
@@ -193,7 +193,7 @@ require_once __DIR__ . '/../includes/header.php';
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
           </svg>
         </div>
-        <h3 class="text-(--text-h3) font-bold text-text mb-3">Faster Delivery</h3>
+        <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Faster Delivery</h3>
         <p class="text-text-2 leading-relaxed">
           Overlapping design and construction phases means your project breaks ground sooner and completes faster. Our design-build projects typically deliver 20–30% ahead of traditional timelines.
         </p>
@@ -206,7 +206,7 @@ require_once __DIR__ . '/../includes/header.php';
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
-        <h3 class="text-(--text-h3) font-bold text-text mb-3">Budget Certainty</h3>
+        <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Budget Certainty</h3>
         <p class="text-text-2 leading-relaxed">
           Real-time cost feedback during design prevents the sticker shock of bidding a completed design. We value-engineer as we design — not after the blueprints are done.
         </p>
@@ -224,7 +224,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">HOW IT WORKS</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         From Concept to Certificate
       </h2>
     </div>
@@ -234,7 +234,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 1 -->
       <li class="reveal">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">01</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">01</div>
           <h3 class="text-lg font-bold text-text mb-3">Discover</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             We meet with you to understand your vision, goals, site, and budget. This is where we listen — and where the seeds of great design are planted.
@@ -245,7 +245,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 2 -->
       <li class="reveal reveal-delay-1">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">02</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">02</div>
           <h3 class="text-lg font-bold text-text mb-3">Design</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Our design team develops concept drawings, schematic designs, and construction documents — with real-time cost feedback built in so budget and design stay aligned throughout.
@@ -256,7 +256,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 3 -->
       <li class="reveal reveal-delay-2">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">03</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">03</div>
           <h3 class="text-lg font-bold text-text mb-3">Build</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Construction begins — often while final design details are still being refined. Our integrated approach means overlapping phases instead of waiting for a complete set of drawings.
@@ -267,7 +267,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 4 -->
       <li class="reveal reveal-delay-3">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">04</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">04</div>
           <h3 class="text-lg font-bold text-text mb-3">Deliver</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Final walkthrough, punch list, and certificate of occupancy. We hand you a building that matches what we designed — because we never lost the thread between vision and construction.
@@ -290,7 +290,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Copy -->
       <div class="reveal">
         <p class="section-label">DESIGN WITH INTENTION</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Spaces That Reflect Who You Are
         </h2>
         <div class="space-y-5 text-text-2 leading-relaxed">
@@ -323,7 +323,7 @@ require_once __DIR__ . '/../includes/header.php';
           <!-- Decorative gold accent line -->
           <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent-400 via-accent-400/50 to-transparent rounded-l-[var(--radius-xl)]"></div>
           <blockquote class="space-y-6">
-            <p class="text-(--text-body-lg) text-text-2 leading-relaxed italic font-accent">
+            <p class="text-[length:var(--text-body-lg)] text-text-2 leading-relaxed italic font-accent">
               "We don't just build what's on the drawings. We build what the client actually envisioned — and those two things are only the same when design and construction work together from day one."
             </p>
             <footer class="flex items-center gap-4">
@@ -349,7 +349,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">FAQ</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         Common Questions
       </h2>
     </div>

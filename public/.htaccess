@@ -9,14 +9,21 @@ ErrorDocument 404 /404.php
 RewriteEngine On
 
 # ============================================================
-# MAINTENANCE MODE — comment out these lines to disable
+# MAINTENANCE MODE — now handled via PHP/DB in header.php
 # Preview: moksha.construction/preview.php?key=moksha2026
 # ============================================================
-RewriteCond %{REQUEST_URI} !^/maintenance\.html$
-RewriteCond %{REQUEST_URI} !^/preview\.php$
-RewriteCond %{REQUEST_URI} !^/assets/
-RewriteCond %{HTTP_COOKIE} !moksha_preview=1
-RewriteRule ^(.*)$ /maintenance.html [L,R=302]
+# RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+# RewriteCond %{REQUEST_URI} !^/preview\.php$
+# RewriteCond %{REQUEST_URI} !^/setup-db\.php$
+# RewriteCond %{REQUEST_URI} !^/admin/
+# RewriteCond %{REQUEST_URI} !^/assets/
+# RewriteCond %{HTTP_COOKIE} !moksha_preview=1
+# RewriteRule ^(.*)$ /maintenance.html [L,R=302]
+
+# Project detail pages
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^projects/([a-z0-9-]+)/?$ /project.php?slug=$1 [L,QSA]
 
 # Clean URLs — serve .php without extension
 RewriteCond %{REQUEST_FILENAME} !-f

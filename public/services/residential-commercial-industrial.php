@@ -71,12 +71,12 @@ require_once __DIR__ . '/../includes/header.php';
     <p class="section-label reveal">OUR SERVICES</p>
 
     <!-- H1 -->
-    <h1 class="text-(--text-hero) font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
+    <h1 class="text-[length:var(--text-hero)] font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
       Every Sector. Every Scale. One Standard of Excellence.
     </h1>
 
     <!-- Subtext -->
-    <p class="text-(--text-body-lg) text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
+    <p class="text-[length:var(--text-body-lg)] text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
       Custom homes, commercial complexes, industrial facilities, and religious structures — built with the same commitment to quality.
     </p>
 
@@ -128,7 +128,7 @@ require_once __DIR__ . '/../includes/header.php';
         <!-- Badge -->
         <span class="inline-block px-3 py-1 bg-accent-400/10 border border-accent-400/20 rounded-full text-xs font-bold text-accent-400 uppercase tracking-widest mb-6">Residential</span>
 
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Your Dream Home, Engineered to Last
         </h2>
 
@@ -184,7 +184,7 @@ require_once __DIR__ . '/../includes/header.php';
         <!-- Badge -->
         <span class="inline-block px-3 py-1 bg-brand-600/15 border border-brand-500/20 rounded-full text-xs font-bold text-brand-300 uppercase tracking-widest mb-6">Commercial</span>
 
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Spaces That Drive Business Forward
         </h2>
 
@@ -268,7 +268,7 @@ require_once __DIR__ . '/../includes/header.php';
         <!-- Badge -->
         <span class="inline-block px-3 py-1 bg-[oklch(100%_0_0/0.05)] border border-[oklch(100%_0_0/0.10)] rounded-full text-xs font-bold text-text-2 uppercase tracking-widest mb-6">Industrial</span>
 
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Built for Operational Efficiency
         </h2>
 
@@ -328,7 +328,7 @@ require_once __DIR__ . '/../includes/header.php';
         <!-- Badge -->
         <span class="inline-block px-3 py-1.5 bg-accent-400/15 border border-accent-400/30 rounded-full text-xs font-bold text-accent-400 uppercase tracking-widest mb-8">Unique Specialization</span>
 
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Religious &amp; Cultural Construction
         </h2>
 
@@ -408,7 +408,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">FAQ</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         Common Questions
       </h2>
     </div>

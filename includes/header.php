@@ -1,4 +1,22 @@
-<?php require_once __DIR__ . '/config.php'; ?>
+<?php
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/db.php';
+
+// Maintenance mode check — bypass for admin pages and preview cookie
+$isAdmin = str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin');
+$hasPreview = isset($_COOKIE['moksha_preview']) && $_COOKIE['moksha_preview'] === '1';
+
+if (!$isAdmin && !$hasPreview) {
+    $mStmt = $db->query("SELECT setting_value FROM settings WHERE setting_key = 'maintenance_mode' LIMIT 1");
+    $mMode = $mStmt->fetchColumn();
+    if ($mMode === '1') {
+        http_response_code(503);
+        header('Retry-After: 3600');
+        readfile(__DIR__ . '/../public/maintenance.html');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en" class="grain">
 <head>

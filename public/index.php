@@ -4,6 +4,8 @@
  * /public/index.php
  */
 
+require_once __DIR__ . '/includes/db.php';
+
 $current_page    = 'home';
 $page_title      = 'Moksha Construction | General Contractor in Clarksville & Nashville, TN';
 $page_description = 'Moksha Construction is a licensed general contractor in Clarksville, TN serving Nashville, Atlanta, and the Southeast. Residential, commercial, industrial & religious construction. Get a free quote today.';
@@ -32,6 +34,10 @@ $extra_schemas = [
     ],
 ];
 
+// Featured projects for homepage
+$featuredStmt = $db->query('SELECT * FROM projects WHERE status = "published" ORDER BY sort_order ASC, created_at DESC LIMIT 3');
+$featuredProjects = $featuredStmt->fetchAll();
+
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -40,18 +46,19 @@ require_once __DIR__ . '/includes/header.php';
 ============================================================ -->
 <section class="relative min-h-screen flex flex-col justify-center overflow-hidden" aria-label="Hero">
 
-  <!-- Image Background -->
+  <!-- Video Background -->
   <div class="absolute inset-0 z-0">
-    <img
-      src="/assets/images/services/drone-bim.webp"
-      alt=""
-      aria-hidden="true"
+    <video
+      autoplay muted loop playsinline
+      preload="metadata"
+      poster="/assets/images/hero-poster.jpg"
       class="w-full h-full object-cover object-center"
-      loading="eager"
-      fetchpriority="high"
+      aria-hidden="true"
     >
+      <source src="/assets/video/hero.mp4" type="video/mp4">
+    </video>
 
-    <!-- Dark gradient overlay: heavy at bottom, fades to transparent -->
+    <!-- Dark gradient overlay -->
     <div class="absolute inset-0 bg-gradient-to-t from-[oklch(6%_0.008_310/0.85)] via-[oklch(6%_0.008_310/0.55)] to-transparent"></div>
     <!-- Purple radial glow — bottom-left corner -->
     <div class="absolute bottom-0 left-0 w-[60vw] h-[60vh] bg-[radial-gradient(ellipse_at_bottom_left,_oklch(46%_0.22_310/0.30)_0%,_transparent_70%)] pointer-events-none"></div>
@@ -66,13 +73,13 @@ require_once __DIR__ . '/includes/header.php';
     </p>
 
     <!-- H1 -->
-    <h1 class="font-[var(--font-display)] text-[var(--text-hero)] font-extrabold tracking-tight leading-[1.05] max-w-4xl mb-6 reveal reveal-delay-1">
+    <h1 class="font-[var(--font-display)] text-[length:var(--text-hero)] font-extrabold tracking-tight leading-[1.05] max-w-4xl mb-6 reveal reveal-delay-1">
       We Don't Just Build Structures.<br>
       <span class="text-accent-400">We Build Legacies.</span>
     </h1>
 
     <!-- Subhead -->
-    <p class="text-[var(--text-body-lg)] text-text-2 max-w-2xl mb-10 reveal reveal-delay-2">
+    <p class="text-[length:var(--text-body-lg)] text-text-2 max-w-2xl mb-10 reveal reveal-delay-2">
       Licensed across Tennessee, Texas, and North Carolina — with offices in Nashville and Atlanta. From ground-up commercial builds to custom residential projects, Moksha Construction delivers on time, on budget, and built to last.
     </p>
 
@@ -146,7 +153,7 @@ require_once __DIR__ . '/includes/header.php';
 
           <div>
             <p class="section-label mb-3">WHO WE ARE</p>
-            <h2 id="about-heading" class="text-[var(--text-h2)] font-bold tracking-tight">
+            <h2 id="about-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight">
               Precision-Built for the Southeast
             </h2>
           </div>
@@ -155,10 +162,10 @@ require_once __DIR__ . '/includes/header.php';
 
       <!-- Right: Copy -->
       <div class="lg:col-span-3 reveal reveal-delay-2">
-        <p class="text-[var(--text-body-lg)] text-text-2 mb-5">
+        <p class="text-[length:var(--text-body-lg)] text-text-2 mb-5">
           Moksha Construction is a full-service general contractor headquartered in Clarksville, Tennessee, with offices in Nashville and Atlanta. We specialize in general contracting, construction management, and design-build services across residential, commercial, industrial, and religious construction.
         </p>
-        <p class="text-[var(--text-body-lg)] text-text-2 mb-8">
+        <p class="text-[length:var(--text-body-lg)] text-text-2 mb-8">
           Our team combines 15 years of collective experience with a global perspective — delivering projects that meet the highest standards of craftsmanship while staying on schedule and within budget. We're licensed across multiple states and growing, because our clients keep coming back.
         </p>
         <a href="/about" class="btn-ghost text-base">
@@ -181,7 +188,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Section Header -->
     <div class="text-center mb-12">
       <p class="section-label reveal">WHAT WE DO</p>
-      <h2 id="services-heading" class="text-[var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
+      <h2 id="services-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
         Services Built Around Your Vision
       </h2>
     </div>
@@ -205,7 +212,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
             </svg>
           </div>
-          <h3 class="text-[var(--text-h3)] font-bold mb-2">General Contracting</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-2">General Contracting</h3>
           <p class="text-text-2 text-sm leading-relaxed mb-4">Complete project oversight from permits to punch list. We coordinate every trade so you don't have to.</p>
           <span class="btn-ghost text-sm">
             Learn More
@@ -229,7 +236,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"/>
             </svg>
           </div>
-          <h3 class="text-[var(--text-h3)] font-bold mb-2">Construction Management</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Construction Management</h3>
           <p class="text-text-2 text-sm leading-relaxed mb-4">Data-driven project management that eliminates overruns and keeps your build on track.</p>
           <span class="btn-ghost text-sm">
             Learn More
@@ -253,7 +260,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/>
             </svg>
           </div>
-          <h3 class="text-[var(--text-h3)] font-bold mb-2">Design &amp; Build</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Design &amp; Build</h3>
           <p class="text-text-2 text-sm leading-relaxed mb-4">One team, one vision, one point of accountability — from concept sketch to final walkthrough.</p>
           <span class="btn-ghost text-sm">
             Learn More
@@ -277,7 +284,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/>
             </svg>
           </div>
-          <h3 class="text-[var(--text-h3)] font-bold mb-2">Residential · Commercial · Industrial</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Residential · Commercial · Industrial</h3>
           <p class="text-text-2 text-sm leading-relaxed mb-4">Custom homes, retail centers, warehouses, and everything in between. We build across sectors.</p>
           <span class="btn-ghost text-sm">
             Learn More
@@ -302,10 +309,10 @@ require_once __DIR__ . '/includes/header.php';
       <p class="section-label">OUR WORK</p>
     </div>
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
-      <h2 id="projects-heading" class="text-[var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
+      <h2 id="projects-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
         Projects That Speak<br>for Themselves
       </h2>
-      <p class="text-text-2 text-[var(--text-body-lg)] max-w-sm reveal reveal-delay-2">
+      <p class="text-text-2 text-[length:var(--text-body-lg)] max-w-sm reveal reveal-delay-2">
         From 90-suite hotels to 280,000 sq ft exhibition centers — see what Moksha Construction delivers.
       </p>
     </div>
@@ -313,65 +320,35 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Project Cards Row — scrollable on mobile -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible">
 
-      <!-- Card 1: Exhibition Center -->
-      <article class="project-card reveal reveal-delay-1">
+      <?php foreach ($featuredProjects as $i => $fp): ?>
+      <article class="project-card reveal reveal-delay-<?= $i + 1 ?>">
         <img
-          src="/assets/images/projects/exhibition/main.png"
-          alt="Expansive Exhibition Center — 280,000 sq ft commercial project in Clarksville, TN"
+          src="<?= htmlspecialchars($fp['featured_image'] ?? '/assets/images/projects/placeholder.jpg') ?>"
+          alt="<?= htmlspecialchars($fp['title']) ?> — <?= htmlspecialchars($fp['size'] ?? '') ?> <?= htmlspecialchars($fp['type']) ?> project<?= $fp['location'] ? ' in ' . htmlspecialchars($fp['location']) : '' ?>"
           loading="lazy"
           width="800"
           height="533"
         >
-        <span class="project-badge">COMMERCIAL</span>
+        <span class="project-badge"><?= strtoupper(htmlspecialchars($fp['type'])) ?></span>
         <div class="project-card-overlay">
-          <h3 class="text-[var(--text-h3)] font-bold mb-1">Expansive Exhibition Center</h3>
-          <p class="text-text-2 text-sm">280,000 sq ft · Clarksville, TN</p>
-          <a href="/projects/exhibition-center" class="btn-ghost text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-1"><?= htmlspecialchars($fp['title']) ?></h3>
+          <p class="text-text-2 text-sm">
+            <?= $fp['size'] ? htmlspecialchars($fp['size']) . ' · ' : '' ?>
+            <?= htmlspecialchars($fp['location'] ?? '') ?>
+          </p>
+          <a href="/projects/<?= htmlspecialchars($fp['slug']) ?>" class="btn-ghost text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
             View Project
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
       </article>
+      <?php endforeach; ?>
 
-      <!-- Card 2: Office Building -->
-      <article class="project-card reveal reveal-delay-2">
-        <img
-          src="/assets/images/projects/office/main.png"
-          alt="Versatile Office Building — 200,000 sq ft with live sound studio, theaters, and cafe"
-          loading="lazy"
-          width="800"
-          height="533"
-        >
-        <span class="project-badge">COMMERCIAL</span>
-        <div class="project-card-overlay">
-          <h3 class="text-[var(--text-h3)] font-bold mb-1">Versatile Office Building</h3>
-          <p class="text-text-2 text-sm">200,000 sq ft · Live Sound Studio, Theaters, Cafe</p>
-          <a href="/projects/office-building" class="btn-ghost text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-            View Project
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <!-- Card 3: Hotel -->
-      <article class="project-card reveal reveal-delay-3">
-        <img
-          src="/assets/images/projects/hotel/main.png"
-          alt="Luxurious Hotel of Distinction — 90 room suites in Clarksville, TN"
-          loading="lazy"
-          width="800"
-          height="533"
-        >
-        <span class="project-badge">HOSPITALITY</span>
-        <div class="project-card-overlay">
-          <h3 class="text-[var(--text-h3)] font-bold mb-1">Luxurious Hotel of Distinction</h3>
-          <p class="text-text-2 text-sm">90 Room Suites · Clarksville, TN</p>
-          <a href="/projects/hotel" class="btn-ghost text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-            View Project
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </article>
+      <?php if (empty($featuredProjects)): ?>
+      <div class="col-span-3 text-center py-12">
+        <p class="text-text-3">Projects coming soon.</p>
+      </div>
+      <?php endif; ?>
 
     </div>
 
@@ -420,7 +397,7 @@ require_once __DIR__ . '/includes/header.php';
       <div>
         <div class="reveal mb-10">
           <p class="section-label mb-3">WHY MOKSHA</p>
-          <h2 id="why-heading" class="text-[var(--text-h2)] font-bold tracking-tight">
+          <h2 id="why-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight">
             What Sets Us Apart
           </h2>
         </div>
@@ -433,7 +410,7 @@ require_once __DIR__ . '/includes/header.php';
               <span class="text-accent-400 font-extrabold text-sm leading-none">01</span>
             </div>
             <div>
-              <h3 class="text-[var(--text-h3)] font-bold mb-2">Licensed Across Five States</h3>
+              <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Licensed Across Five States</h3>
               <p class="text-text-2 leading-relaxed">We hold active licenses in Tennessee, Texas, and North Carolina — with Georgia, South Carolina, and Florida in progress. One contractor, no borders.</p>
             </div>
           </li>
@@ -444,7 +421,7 @@ require_once __DIR__ . '/includes/header.php';
               <span class="text-accent-400 font-extrabold text-sm leading-none">02</span>
             </div>
             <div>
-              <h3 class="text-[var(--text-h3)] font-bold mb-2">Smart Homes &amp; Modern Construction</h3>
+              <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Smart Homes &amp; Modern Construction</h3>
               <p class="text-text-2 leading-relaxed">Our in-house IT specialists integrate cutting-edge technology into every build. From connected home systems to BIM-driven project management, we build for the future.</p>
             </div>
           </li>
@@ -455,7 +432,7 @@ require_once __DIR__ . '/includes/header.php';
               <span class="text-accent-400 font-extrabold text-sm leading-none">03</span>
             </div>
             <div>
-              <h3 class="text-[var(--text-h3)] font-bold mb-2">Religious &amp; Cultural Construction</h3>
+              <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Religious &amp; Cultural Construction</h3>
               <p class="text-text-2 leading-relaxed">We're one of the only contractors in the Southeast with deep experience building temples, churches, and culturally significant structures. We understand the unique requirements, sensitivities, and craftsmanship these projects demand.</p>
             </div>
           </li>
@@ -466,7 +443,7 @@ require_once __DIR__ . '/includes/header.php';
               <span class="text-accent-400 font-extrabold text-sm leading-none">04</span>
             </div>
             <div>
-              <h3 class="text-[var(--text-h3)] font-bold mb-2">Diverse Expertise, Deep Local Knowledge</h3>
+              <h3 class="text-[length:var(--text-h3)] font-bold mb-2">Diverse Expertise, Deep Local Knowledge</h3>
               <p class="text-text-2 leading-relaxed">Our team brings perspectives from across the country and the globe — backed by roots in Clarksville and Nashville. We understand this market because we live here.</p>
             </div>
           </li>
@@ -488,7 +465,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Section Header -->
     <div class="text-center mb-12">
       <p class="section-label reveal">TRUSTED PARTNERS</p>
-      <h2 id="partners-heading" class="text-[var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
+      <h2 id="partners-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
         Built With the Best
       </h2>
     </div>
@@ -561,7 +538,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Section Header -->
     <div class="text-center mb-12">
       <p class="section-label reveal">LEADERSHIP</p>
-      <h2 id="leadership-heading" class="text-[var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
+      <h2 id="leadership-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
         Meet the Builder Behind the Brand
       </h2>
     </div>
@@ -589,7 +566,7 @@ require_once __DIR__ . '/includes/header.php';
         <!-- Bio Column -->
         <div class="md:col-span-3 p-8 lg:p-12 flex flex-col justify-center">
           <div class="mb-6">
-            <h3 class="text-[var(--text-h3)] font-bold text-text mb-1">Parth Patel</h3>
+            <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-1">Parth Patel</h3>
             <p class="text-accent-400 font-semibold text-sm tracking-wide uppercase">Managing Director</p>
           </div>
 
@@ -701,7 +678,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Section Header -->
     <div class="text-center mb-12">
       <p class="section-label reveal">WHERE WE BUILD</p>
-      <h2 id="areas-heading" class="text-[var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
+      <h2 id="areas-heading" class="text-[length:var(--text-h2)] font-bold tracking-tight reveal reveal-delay-1">
         Serving the Southeast — and Growing
       </h2>
     </div>

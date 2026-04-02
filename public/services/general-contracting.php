@@ -71,12 +71,12 @@ require_once __DIR__ . '/../includes/header.php';
     <p class="section-label reveal">OUR SERVICES</p>
 
     <!-- H1 -->
-    <h1 class="text-(--text-hero) font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
+    <h1 class="text-[length:var(--text-hero)] font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
       General Contracting That Delivers
     </h1>
 
     <!-- Subtext -->
-    <p class="text-(--text-body-lg) text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
+    <p class="text-[length:var(--text-body-lg)] text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
       Complete project oversight from foundation to finish. Licensed in Tennessee, Texas, and North Carolina.
     </p>
 
@@ -98,10 +98,10 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Left: copy (60%) -->
       <div class="lg:col-span-3 reveal">
         <p class="section-label">WHAT WE DO</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Your Single Point of Accountability
         </h2>
-        <div class="space-y-5 text-text-2 text-(--text-body-lg) leading-relaxed">
+        <div class="space-y-5 text-text-2 text-[length:var(--text-body-lg)] leading-relaxed">
           <p>
             As your general contractor, Moksha Construction takes full responsibility for your build — from the first permit application to the final punch list walkthrough. We coordinate architects, engineers, and subcontractors into a single, efficient operation so your project stays on schedule and within budget.
           </p>
@@ -114,7 +114,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Right: quick facts card (40%) -->
       <aside class="lg:col-span-2 reveal reveal-delay-2">
         <div class="card p-8 border-t-[3px] border-t-accent-400">
-          <h3 class="text-(--text-h3) font-bold text-text mb-6">Quick Facts</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-6">Quick Facts</h3>
           <ul class="space-y-4">
             <li class="flex items-start gap-3">
               <span class="mt-1 w-5 h-5 rounded-full bg-accent-400/15 flex items-center justify-center shrink-0">
@@ -163,7 +163,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">CAPABILITIES</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         What We Handle
       </h2>
       <p class="text-text-2 mt-4 reveal reveal-delay-2">
@@ -180,7 +180,7 @@ require_once __DIR__ . '/../includes/header.php';
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
           </svg>
         </div>
-        <h3 class="text-(--text-h3) font-bold text-text mb-3">Project Coordination &amp; Scheduling</h3>
+        <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Project Coordination &amp; Scheduling</h3>
         <p class="text-text-2 leading-relaxed">
           We build the master schedule and manage every phase — excavation, framing, MEP, finishes. Our project managers maintain daily coordination with every trade on site, flagging conflicts before they become delays.
         </p>
@@ -193,7 +193,7 @@ require_once __DIR__ . '/../includes/header.php';
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
           </svg>
         </div>
-        <h3 class="text-(--text-h3) font-bold text-text mb-3">Budget Management &amp; Cost Control</h3>
+        <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Budget Management &amp; Cost Control</h3>
         <p class="text-text-2 leading-relaxed">
           Transparent budgets with line-item breakdowns. We track costs against estimates in real time, giving you full visibility into where your money goes — and catching variances before they compound.
         </p>
@@ -206,7 +206,7 @@ require_once __DIR__ . '/../includes/header.php';
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
-        <h3 class="text-(--text-h3) font-bold text-text mb-3">Quality Assurance &amp; Inspections</h3>
+        <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Quality Assurance &amp; Inspections</h3>
         <p class="text-text-2 leading-relaxed">
           Every material and installation meets or exceeds code requirements. We conduct internal quality audits at every milestone and coordinate all municipal inspections to keep your Certificate of Occupancy on track.
         </p>
@@ -224,7 +224,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">HOW IT WORKS</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         Our Process
       </h2>
     </div>
@@ -234,7 +234,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 1 -->
       <li class="relative reveal">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">01</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">01</div>
           <h3 class="text-lg font-bold text-text mb-3">Discover</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             We learn your vision, site, and budget. This phase covers an initial site visit, scope discussion, and preliminary assessment — so we understand every constraint before we plan.
@@ -245,7 +245,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 2 -->
       <li class="relative reveal reveal-delay-1">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">02</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">02</div>
           <h3 class="text-lg font-bold text-text mb-3">Plan</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Detailed scope, schedule, and trade plan. We build the master project schedule, procure subcontractors, lock the budget, and submit all permit applications before a single shovel breaks ground.
@@ -256,7 +256,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 3 -->
       <li class="relative reveal reveal-delay-2">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">03</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">03</div>
           <h3 class="text-lg font-bold text-text mb-3">Build</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Active site management with weekly reporting. Our superintendent is on site daily, coordinating trades, tracking progress, and communicating updates to you every step of the way.
@@ -267,7 +267,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 4 -->
       <li class="relative reveal reveal-delay-3">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">04</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">04</div>
           <h3 class="text-lg font-bold text-text mb-3">Deliver</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Final inspections, punch list, and handover. We walk the completed structure with you, resolve every open item, and hand you the keys — along with all warranty documents and as-built drawings.
@@ -290,7 +290,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Copy -->
       <div class="reveal">
         <p class="section-label">TECHNOLOGY</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Building Smart Homes for the Connected Generation
         </h2>
         <p class="text-text-2 leading-relaxed mb-6">
@@ -345,7 +345,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">FAQ</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         Common Questions
       </h2>
     </div>

@@ -71,12 +71,12 @@ require_once __DIR__ . '/../includes/header.php';
     <p class="section-label reveal">OUR SERVICES</p>
 
     <!-- H1 -->
-    <h1 class="text-(--text-hero) font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
+    <h1 class="text-[length:var(--text-hero)] font-bold tracking-tight text-text max-w-3xl reveal reveal-delay-1">
       Construction Management That Eliminates the Guesswork
     </h1>
 
     <!-- Subtext -->
-    <p class="text-(--text-body-lg) text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
+    <p class="text-[length:var(--text-body-lg)] text-text-2 mt-6 max-w-xl reveal reveal-delay-2">
       Data-driven project management. Transparent reporting. Zero surprises.
     </p>
 
@@ -98,10 +98,10 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Left: copy (60%) -->
       <div class="lg:col-span-3 reveal">
         <p class="section-label">THE MOKSHA APPROACH</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight text-text mb-6">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text mb-6">
           Proactive Management. Predictable Results.
         </h2>
-        <div class="space-y-5 text-text-2 text-(--text-body-lg) leading-relaxed">
+        <div class="space-y-5 text-text-2 text-[length:var(--text-body-lg)] leading-relaxed">
           <p>
             Effective construction management is the difference between a project that delivers on its promises and one that spirals into delays and overruns. At Moksha Construction, our construction management team takes a proactive approach — identifying problems before they surface, optimizing schedules for efficiency, and maintaining transparent communication at every milestone.
           </p>
@@ -114,7 +114,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Right: quick facts card (40%) -->
       <aside class="lg:col-span-2 reveal reveal-delay-2">
         <div class="card p-8 border-t-[3px] border-t-accent-400">
-          <h3 class="text-(--text-h3) font-bold text-text mb-6">Why It Works</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-6">Why It Works</h3>
           <ul class="space-y-4">
             <li class="flex items-start gap-3">
               <span class="mt-1 w-5 h-5 rounded-full bg-accent-400/15 flex items-center justify-center shrink-0">
@@ -163,7 +163,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">SCOPE OF SERVICES</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         What We Manage
       </h2>
       <p class="text-text-2 mt-4 reveal reveal-delay-2">
@@ -182,7 +182,7 @@ require_once __DIR__ . '/../includes/header.php';
             </svg>
           </div>
           <div>
-            <h3 class="text-(--text-h3) font-bold text-text mb-3">Pre-Construction Planning</h3>
+            <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Pre-Construction Planning</h3>
             <p class="text-text-2 leading-relaxed">
               Before a shovel hits dirt, we build a comprehensive project plan — scope definition, trade procurement, value engineering, and risk assessment. Our pre-construction process identifies cost savings and scheduling efficiencies that compound throughout the build.
             </p>
@@ -199,7 +199,7 @@ require_once __DIR__ . '/../includes/header.php';
             </svg>
           </div>
           <div>
-            <h3 class="text-(--text-h3) font-bold text-text mb-3">Schedule Optimization</h3>
+            <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Schedule Optimization</h3>
             <p class="text-text-2 leading-relaxed">
               We use modern scheduling tools to map critical path activities, manage float time, and coordinate trade sequences. Our project managers monitor progress against the baseline daily, adjusting in real time to prevent cascading delays.
             </p>
@@ -216,7 +216,7 @@ require_once __DIR__ . '/../includes/header.php';
             </svg>
           </div>
           <div>
-            <h3 class="text-(--text-h3) font-bold text-text mb-3">Cost Tracking &amp; Reporting</h3>
+            <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Cost Tracking &amp; Reporting</h3>
             <p class="text-text-2 leading-relaxed">
               Monthly cost reports with variance analysis. Change order tracking with impact projections. Budget-to-actual comparisons at every milestone. You always know exactly where your project stands financially.
             </p>
@@ -233,7 +233,7 @@ require_once __DIR__ . '/../includes/header.php';
             </svg>
           </div>
           <div>
-            <h3 class="text-(--text-h3) font-bold text-text mb-3">Quality &amp; Safety Compliance</h3>
+            <h3 class="text-[length:var(--text-h3)] font-bold text-text mb-3">Quality &amp; Safety Compliance</h3>
             <p class="text-text-2 leading-relaxed">
               Our safety-first approach includes daily job site inspections, OSHA compliance monitoring, subcontractor safety orientations, and incident-free project goals. Quality audits happen at every phase gate — not just at the end.
             </p>
@@ -253,7 +253,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">HOW IT WORKS</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         Our Process
       </h2>
     </div>
@@ -263,7 +263,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 1 -->
       <li class="reveal">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">01</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">01</div>
           <h3 class="text-lg font-bold text-text mb-3">Assess</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Site analysis, feasibility study, and risk review. We evaluate existing conditions, understand project objectives, and identify potential challenges before committing to a plan.
@@ -274,7 +274,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 2 -->
       <li class="reveal reveal-delay-1">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">02</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">02</div>
           <h3 class="text-lg font-bold text-text mb-3">Strategize</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Master schedule, budget lock, and trade awards. We finalize procurement, negotiate subcontractor agreements, and establish the baseline plan against which all progress will be measured.
@@ -285,7 +285,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 3 -->
       <li class="reveal reveal-delay-2">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">03</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">03</div>
           <h3 class="text-lg font-bold text-text mb-3">Execute</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Daily oversight, weekly reports, and issue resolution. We are your eyes on the ground — managing trades, tracking milestones, and escalating issues before they become delays.
@@ -296,7 +296,7 @@ require_once __DIR__ . '/../includes/header.php';
       <!-- Step 4 -->
       <li class="reveal reveal-delay-3">
         <div class="card p-8 h-full">
-          <div class="text-(--text-display) font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">04</div>
+          <div class="text-[length:var(--text-display)] font-black text-accent-400/20 leading-none mb-4 select-none" aria-hidden="true">04</div>
           <h3 class="text-lg font-bold text-text mb-3">Close Out</h3>
           <p class="text-text-2 text-sm leading-relaxed">
             Final inspections, documentation, and handover. We compile all close-out packages — warranties, as-builts, O&amp;M manuals — and ensure every outstanding item is resolved before we sign off.
@@ -317,7 +317,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="text-center max-w-2xl mx-auto mb-16">
       <p class="section-label reveal">FAQ</p>
-      <h2 class="text-(--text-h2) font-bold tracking-tight text-text reveal reveal-delay-1">
+      <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight text-text reveal reveal-delay-1">
         Common Questions
       </h2>
     </div>

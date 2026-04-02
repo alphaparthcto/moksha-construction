@@ -43,11 +43,11 @@ require_once __DIR__ . '/includes/header.php';
 
     <div class="relative max-w-[var(--container)] mx-auto px-6">
       <p class="section-label reveal">OUR STORY</p>
-      <h1 class="text-(--text-hero) font-bold tracking-tight mb-6 reveal reveal-delay-1">
+      <h1 class="text-[length:var(--text-hero)] font-bold tracking-tight mb-6 reveal reveal-delay-1">
         Built on Integrity.<br>
         <em class="font-accent not-italic text-accent-400">Growing by Reputation.</em>
       </h1>
-      <p class="text-(--text-body-lg) text-text-2 max-w-2xl reveal reveal-delay-2">
+      <p class="text-[length:var(--text-body-lg)] text-text-2 max-w-2xl reveal reveal-delay-2">
         From Clarksville to Atlanta — Moksha Construction is building the Southeast, one landmark at a time.
       </p>
     </div>
@@ -77,7 +77,7 @@ require_once __DIR__ . '/includes/header.php';
         <!-- Right: Story copy -->
         <div class="reveal reveal-delay-1">
           <p class="section-label">WHO WE ARE</p>
-          <h2 class="text-(--text-h2) font-bold tracking-tight mb-6">
+          <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight mb-6">
             A Firm Built to Outlast
           </h2>
           <div class="space-y-5 text-text-2 leading-relaxed">
@@ -138,61 +138,83 @@ require_once __DIR__ . '/includes/header.php';
   </section>
 
   <!-- ============================================================
-       LEADERSHIP
+       OUR TEAM
   ============================================================ -->
   <section class="py-(--section-y) bg-subtle">
     <div class="max-w-[var(--container)] mx-auto px-6">
 
       <div class="text-center mb-14 reveal">
-        <p class="section-label">LEADERSHIP</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight">Meet the Builder Behind the Brand</h2>
+        <p class="section-label">OUR TEAM</p>
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight">
+          The People Behind<br>
+          <em class="font-accent not-italic text-accent-400">Every Project</em>
+        </h2>
+        <p class="text-text-2 mt-4 max-w-xl mx-auto text-[length:var(--text-body-lg)]">
+          A tight-knit leadership team with decades of combined experience in construction, project management, and technology.
+        </p>
       </div>
 
-      <!-- Leader card -->
-      <div class="card p-0 overflow-hidden max-w-5xl mx-auto reveal reveal-delay-1">
-        <div class="grid grid-cols-1 md:grid-cols-2">
+      <?php
+      $team = [
+          [
+              'name'     => 'Rakesh Patel',
+              'role'     => 'Chief Executive Officer',
+              'initials' => 'RP',
+              'image'    => '/assets/images/team/rakesh-patel.jpg',
+              'bio'      => 'Visionary leader with decades of experience in construction and real estate development across the Southeast. Rakesh sets the strategic direction for Moksha Construction and oversees all operations.',
+          ],
+          [
+              'name'     => 'Parth Patel',
+              'role'     => 'Sr. Project Manager',
+              'initials' => 'PP',
+              'image'    => '/assets/images/team/parth-patel.jpg',
+              'bio'      => 'From 280,000 sq ft exhibition centers to luxury hotels, Parth manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.',
+          ],
+          [
+              'name'     => 'Hari Patel',
+              'role'     => 'Jr. Project Manager',
+              'initials' => 'HP',
+              'image'    => '/assets/images/team/hari-patel.jpg',
+              'bio'      => 'A rising force on the Moksha team, Hari coordinates day-to-day site operations, subcontractor scheduling, and quality control across active projects.',
+          ],
+          [
+              'name'     => 'Parth Patel',
+              'role'     => 'Technology Integrator',
+              'initials' => 'PP',
+              'image'    => '/assets/images/team/parth-patel-tech.jpg',
+              'bio'      => 'Bridges the gap between construction and technology — implementing BIM workflows, project management systems, and digital tools that keep Moksha ahead of the curve.',
+          ],
+      ];
+      ?>
 
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <?php foreach ($team as $i => $member): ?>
+        <div class="card p-0 overflow-hidden group reveal <?= $i > 0 ? 'reveal-delay-' . min($i, 3) : '' ?>">
           <!-- Photo -->
-          <div class="relative aspect-square md:aspect-auto md:min-h-[480px] bg-surface">
+          <div class="relative aspect-[3/4] bg-gradient-to-br from-brand-900 to-brand-700 overflow-hidden">
             <img
-              src="/assets/images/team/parth-patel.jpg"
-              alt="Parth Patel, Managing Director of Moksha Construction"
-              class="w-full h-full object-cover object-top"
+              src="<?= htmlspecialchars($member['image']) ?>"
+              alt="<?= htmlspecialchars($member['name']) ?>, <?= htmlspecialchars($member['role']) ?> at Moksha Construction"
+              class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               onerror="this.style.display='none'"
             >
-            <!-- Fallback monogram if image missing -->
-            <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-brand-900 to-brand-700">
-              <span class="text-7xl font-bold text-accent-400 opacity-40 select-none">PP</span>
+            <!-- Fallback monogram -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <span class="text-6xl font-bold text-accent-400 opacity-30 select-none"><?= $member['initials'] ?></span>
             </div>
-            <!-- Gold left accent border -->
-            <div class="absolute left-0 top-0 bottom-0 w-1 bg-accent-400"></div>
+            <!-- Bottom gradient for text legibility -->
+            <div class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-void/80 to-transparent"></div>
           </div>
 
-          <!-- Bio -->
-          <div class="p-10 flex flex-col justify-center">
-            <p class="section-label">MANAGING DIRECTOR</p>
-            <h3 class="text-(--text-h2) font-bold tracking-tight mb-2">Parth Patel</h3>
-            <div class="w-12 h-0.5 bg-accent-400 mb-6"></div>
-            <div class="space-y-4 text-text-2 leading-relaxed">
-              <p>
-                Parth Patel founded Moksha Construction on the belief that construction should be personal — that every client deserves a builder who treats their project like their own.
-              </p>
-              <p>
-                With experience spanning residential custom homes, large-scale commercial developments, and culturally significant religious structures, Parth has built a team that reflects his standards: transparent communication, meticulous craftsmanship, and a relentless focus on delivering what was promised.
-              </p>
-              <p>
-                Under his leadership, Moksha Construction has expanded from Clarksville into Nashville, Atlanta, and across multiple states — driven not by aggressive sales, but by the referrals of satisfied clients.
-              </p>
-            </div>
-            <div class="mt-8 flex items-center gap-4">
-              <a href="<?= SOCIAL_LINKEDIN ?>" target="_blank" rel="noopener noreferrer" aria-label="Parth Patel on LinkedIn" class="text-text-3 hover:text-accent-400 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-              </a>
-            </div>
+          <!-- Info -->
+          <div class="p-6">
+            <p class="text-xs font-semibold text-accent-400 uppercase tracking-widest mb-1.5"><?= htmlspecialchars($member['role']) ?></p>
+            <h3 class="text-[length:var(--text-h3)] font-bold tracking-tight mb-3"><?= htmlspecialchars($member['name']) ?></h3>
+            <p class="text-sm text-text-2 leading-relaxed"><?= htmlspecialchars($member['bio']) ?></p>
           </div>
-
         </div>
+        <?php endforeach; ?>
       </div>
 
     </div>
@@ -206,7 +228,7 @@ require_once __DIR__ . '/includes/header.php';
 
       <div class="text-center mb-14 reveal">
         <p class="section-label">WHAT WE STAND FOR</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight">The Principles We Build On</h2>
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight">The Principles We Build On</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -218,7 +240,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
             </svg>
           </div>
-          <h3 class="text-(--text-h3) font-bold mb-3">Integrity</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-3">Integrity</h3>
           <p class="text-text-2 leading-relaxed text-sm">
             We say what we mean and build what we promise. Our estimates are honest. Our timelines are realistic. When something goes wrong — and in construction, it sometimes does — we own it and fix it. No finger-pointing, no hidden costs.
           </p>
@@ -232,7 +254,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
           </div>
-          <h3 class="text-(--text-h3) font-bold mb-3">Transparency</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-3">Transparency</h3>
           <p class="text-text-2 leading-relaxed text-sm">
             Every client gets full visibility into their project. Detailed budgets with line-item breakdowns. Weekly progress reports with photos. Open access to our project management systems. You'll never wonder what's happening on your job site.
           </p>
@@ -245,7 +267,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375"/>
             </svg>
           </div>
-          <h3 class="text-(--text-h3) font-bold mb-3">Accountability</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-3">Accountability</h3>
           <p class="text-text-2 leading-relaxed text-sm">
             We take full responsibility for every project outcome. If we commit to a timeline, we hit it. If we commit to a budget, we track every dollar. When we make a mistake, we acknowledge it, learn from it, and make it right.
           </p>
@@ -258,7 +280,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"/>
             </svg>
           </div>
-          <h3 class="text-(--text-h3) font-bold mb-3">Respect</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-3">Respect</h3>
           <p class="text-text-2 leading-relaxed text-sm">
             Your vision comes first. We listen before we recommend. We respect diverse cultural backgrounds and incorporate specific preferences into our work — from residential homes to religious structures. We also respect the environment, prioritizing sustainable practices in every build.
           </p>
@@ -271,7 +293,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
             </svg>
           </div>
-          <h3 class="text-(--text-h3) font-bold mb-3">Compliance</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-3">Compliance</h3>
           <p class="text-text-2 leading-relaxed text-sm">
             Fully licensed, bonded, and insured. We comply with all applicable building codes, safety regulations, OSHA requirements, and industry standards. Safety isn't a checkbox — it's a daily priority on every Moksha job site.
           </p>
@@ -284,7 +306,7 @@ require_once __DIR__ . '/includes/header.php';
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/>
             </svg>
           </div>
-          <h3 class="text-(--text-h3) font-bold mb-3">Licensed Across 5 States</h3>
+          <h3 class="text-[length:var(--text-h3)] font-bold mb-3">Licensed Across 5 States</h3>
           <p class="text-text-2 leading-relaxed text-sm">
             Active licenses in Tennessee, Texas, and North Carolina — with Georgia, South Carolina, and Florida in progress. One trusted contractor, no geographic boundaries.
           </p>
@@ -310,8 +332,8 @@ require_once __DIR__ . '/includes/header.php';
 
       <div class="text-center mb-12 reveal">
         <p class="section-label">WHERE WE BUILD</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight">Serving the Southeast — and Growing</h2>
-        <p class="text-text-2 mt-4 text-(--text-body-lg)">
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight">Serving the Southeast — and Growing</h2>
+        <p class="text-text-2 mt-4 text-[length:var(--text-body-lg)]">
           Headquartered in Clarksville with offices in Nashville and Atlanta.
         </p>
       </div>
@@ -394,8 +416,8 @@ require_once __DIR__ . '/includes/header.php';
 
       <div class="text-center mb-12 reveal">
         <p class="section-label">TRUSTED PARTNERS</p>
-        <h2 class="text-(--text-h2) font-bold tracking-tight">Built With the Best</h2>
-        <p class="text-text-2 mt-3 text-(--text-body-lg)">We partner with industry-leading suppliers and manufacturers to guarantee material quality on every project.</p>
+        <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight">Built With the Best</h2>
+        <p class="text-text-2 mt-3 text-[length:var(--text-body-lg)]">We partner with industry-leading suppliers and manufacturers to guarantee material quality on every project.</p>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center reveal reveal-delay-1">
