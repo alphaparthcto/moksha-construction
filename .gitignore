@@ -1,0 +1,6 @@
+node_modules/
+public/assets/css/
+public/assets/js/
+creds.md
+.DS_Store
+*.log

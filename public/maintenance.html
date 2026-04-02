@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moksha Construction | We'll Be Right Back</title>
+<meta name="description" content="Moksha Construction is a licensed general contractor in Clarksville, TN. We're updating our website — call (615) 234-0272 or email info@moksha.construction.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d0510;
+    color: #f0eef2;
+    font-family: 'Inter', system-ui, sans-serif;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Purple glow */
+  body::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(149,23,179,0.15) 0%, transparent 70%);
+    top: -200px;
+    right: -200px;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,233,7,0.06) 0%, transparent 70%);
+    bottom: -150px;
+    left: -150px;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo {
+    height: clamp(250px, 40vh, 500px);
+    width: auto;
+    margin-bottom: 0.5rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .badge {
+    display: inline-flex;
+    justify-content: center;
+    padding: 0.5rem 1.5rem;
+    background: rgba(255,233,7,0.1);
+    border: 1px solid rgba(255,233,7,0.25);
+    border-radius: 100px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #FFE907;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .gold { color: #FFE907; }
+
+  p {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: #a8a4b0;
+    margin-bottom: 1.5rem;
+    font-size: clamp(0.875rem, 1.5vw, 1.0625rem);
+  }
+
+  .contact-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #f0eef2;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+
+  .contact-card:hover {
+    border-color: rgba(255,233,7,0.3);
+    box-shadow: 0 0 20px rgba(255,233,7,0.08);
+    transform: translateY(-2px);
+  }
+
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(255,233,7,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .contact-icon svg {
+    width: 20px;
+    height: 20px;
+    color: #FFE907;
+  }
+
+  .contact-info {
+    text-align: left;
+  }
+
+  .contact-label {
+    font-size: 0.75rem;
+    color: #6b6777;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    margin-bottom: 0.125rem;
+  }
+
+  .contact-value {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .locations {
+    font-size: 0.8125rem;
+    color: #6b6777;
+    line-height: 1.8;
+  }
+
+  .locations span {
+    color: #a8a4b0;
+  }
+
+  .divider {
+    width: 40px;
+    height: 3px;
+    background: #FFE907;
+    border-radius: 2px;
+    margin: 0 auto 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .contact-cards {
+      flex-direction: row;
+    }
+    .contact-card {
+      flex: 1;
+    }
+  }
+
+  /* Simple fade in */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .container {
+    opacity: 0;
+    animation: fadeIn 1.5s ease 0.3s forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .container { opacity: 1; animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <img src="/assets/images/branding/logo-full-color-vertical.png" alt="Moksha Construction" class="logo">
+
+  <div class="badge">Under Construction</div>
+
+  <h1>Something Big Is <span class="gold">Being Built.</span></h1>
+
+  <p>We're putting the finishing touches on our new website. In the meantime, we're still very much open for business. Reach out — we'd love to hear about your project.</p>
+
+  <div class="contact-cards">
+    <a href="tel:+16152340272" class="contact-card">
+      <div class="contact-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </div>
+      <div class="contact-info">
+        <div class="contact-label">Call Us</div>
+        <div class="contact-value">+1 (615) 234-0272</div>
+      </div>
+    </a>
+
+    <a href="mailto:info@moksha.construction" class="contact-card">
+      <div class="contact-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div class="contact-info">
+        <div class="contact-label">Email Us</div>
+        <div class="contact-value">info@moksha.construction</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="locations">
+    <span>Nashville</span> · 315 Deaderick St, Suite 1550, Nashville, TN 37238<br>
+    <span>Atlanta</span> · 1 W Court Square, Decatur, GA 30030<br><br>
+    Licensed in TN · TX · NC &nbsp;|&nbsp; Expanding to GA · SC · FL
+  </div>
+</div>
+
+</body>
+</html>

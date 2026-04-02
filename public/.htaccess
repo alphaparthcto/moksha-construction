@@ -1,0 +1,46 @@
+# Override parent PHP 7.4 handler — this domain uses PHP-FPM 8.4
+<IfModule mime_module>
+  RemoveHandler .php .php7 .phtml
+  AddHandler application/x-httpd-ea-php84 .php .phtml
+</IfModule>
+
+ErrorDocument 404 /404.php
+
+RewriteEngine On
+
+# ============================================================
+# MAINTENANCE MODE — comment out these lines to disable
+# Preview: moksha.construction/preview.php?key=moksha2026
+# ============================================================
+RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+RewriteCond %{REQUEST_URI} !^/preview\.php$
+RewriteCond %{REQUEST_URI} !^/assets/
+RewriteCond %{HTTP_COOKIE} !moksha_preview=1
+RewriteRule ^(.*)$ /maintenance.html [L,R=302]
+
+# Clean URLs — serve .php without extension
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^services/(.+)$ /services/$1.php [L]
+RewriteRule ^(about|contact|projects)$ /$1.php [L]
+
+# GZIP compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Browser caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
