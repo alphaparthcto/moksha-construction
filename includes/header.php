@@ -12,7 +12,7 @@ if (!$isAdmin && !$hasPreview) {
     if ($mMode === '1') {
         http_response_code(503);
         header('Retry-After: 3600');
-        readfile(__DIR__ . '/../public/maintenance.html');
+        readfile(__DIR__ . '/../maintenance.html');
         exit;
     }
 }
