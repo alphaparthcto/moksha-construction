@@ -158,28 +158,28 @@ require_once __DIR__ . '/includes/header.php';
       $team = [
           [
               'name'     => 'Rakesh Patel',
-              'role'     => 'Chief Executive Officer',
+              'role'     => 'CEO',
               'initials' => 'RP',
               'image'    => '/assets/images/team/rakesh-patel.jpg',
               'bio'      => 'Visionary leader with decades of experience in construction and real estate development across the Southeast. Rakesh sets the strategic direction for Moksha Construction and oversees all operations.',
           ],
           [
               'name'     => 'Parth Patel',
-              'role'     => 'Sr. Project Manager',
+              'role'     => 'Managing Director',
               'initials' => 'PP',
               'image'    => '/assets/images/team/parth-patel.jpg',
               'bio'      => 'From 280,000 sq ft exhibition centers to luxury hotels, Parth manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.',
           ],
           [
               'name'     => 'Hari Patel',
-              'role'     => 'Jr. Project Manager',
+              'role'     => 'CFO',
               'initials' => 'HP',
               'image'    => '/assets/images/team/hari-patel.jpg',
               'bio'      => 'A rising force on the Moksha team, Hari coordinates day-to-day site operations, subcontractor scheduling, and quality control across active projects.',
           ],
           [
               'name'     => 'Parth Patel',
-              'role'     => 'Technology Integrator',
+              'role'     => 'CTO',
               'initials' => 'PP',
               'image'    => '/assets/images/team/parth-patel-tech.jpg',
               'bio'      => 'Bridges the gap between construction and technology — implementing BIM workflows, project management systems, and digital tools that keep Moksha ahead of the curve.',
@@ -197,7 +197,8 @@ require_once __DIR__ . '/includes/header.php';
               alt="<?= htmlspecialchars($member['name']) ?>, <?= htmlspecialchars($member['role']) ?> at Moksha Construction"
               class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
-              onerror="this.style.display='none'"
+              onerror="this.style.display='none';this.nextElementSibling.style.display=''"
+              onload="this.nextElementSibling.style.display='none'"
             >
             <!-- Fallback monogram -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">

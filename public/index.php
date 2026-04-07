@@ -545,10 +545,10 @@ require_once __DIR__ . '/includes/header.php';
 
     <?php
     $team = [
-        ['name' => 'Rakesh Patel',  'role' => 'Chief Executive Officer', 'initials' => 'RP', 'image' => '/assets/images/team/rakesh-patel.jpg',     'bio' => 'Visionary leader with decades of experience in construction and real estate development across the Southeast.'],
-        ['name' => 'Parth Patel',   'role' => 'Sr. Project Manager',     'initials' => 'PP', 'image' => '/assets/images/team/parth-patel.jpg',      'bio' => 'Manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.'],
-        ['name' => 'Hari Patel',    'role' => 'Jr. Project Manager',     'initials' => 'HP', 'image' => '/assets/images/team/hari-patel.jpg',       'bio' => 'Coordinates day-to-day site operations, subcontractor scheduling, and quality control.'],
-        ['name' => 'Parth Patel',   'role' => 'Technology Integrator',   'initials' => 'PP', 'image' => '/assets/images/team/parth-patel-tech.jpg', 'bio' => 'Bridges construction and technology — BIM workflows, project management systems, and digital tools.'],
+        ['name' => 'Rakesh Patel',  'role' => 'CEO',                'initials' => 'RP', 'image' => '/assets/images/team/rakesh-patel.jpg',     'bio' => 'Visionary leader with decades of experience in construction and real estate development across the Southeast.'],
+        ['name' => 'Parth Patel',   'role' => 'Managing Director',  'initials' => 'PP', 'image' => '/assets/images/team/parth-patel.jpg',      'bio' => 'Manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.'],
+        ['name' => 'Hari Patel',    'role' => 'CFO',                'initials' => 'HP', 'image' => '/assets/images/team/hari-patel.jpg',       'bio' => 'Coordinates day-to-day site operations, subcontractor scheduling, and quality control.'],
+        ['name' => 'Parth Patel',   'role' => 'CTO',                'initials' => 'PP', 'image' => '/assets/images/team/parth-patel-tech.jpg', 'bio' => 'Bridges construction and technology — BIM workflows, project management systems, and digital tools.'],
     ];
     ?>
 
@@ -561,7 +561,8 @@ require_once __DIR__ . '/includes/header.php';
             alt="<?= htmlspecialchars($member['name']) ?>, <?= htmlspecialchars($member['role']) ?> at Moksha Construction"
             class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
-            onerror="this.style.display='none'"
+            onerror="this.style.display='none';this.nextElementSibling.style.display=''"
+            onload="this.nextElementSibling.style.display='none'"
           >
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
             <span class="text-6xl font-bold text-accent-400 opacity-30 select-none"><?= $member['initials'] ?></span>
