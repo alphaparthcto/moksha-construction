@@ -158,7 +158,7 @@ require_once __DIR__ . '/includes/header.php';
       $team = [
           [
               'name'     => 'Rakesh Patel',
-              'role'     => 'CEO',
+              'role'     => 'Chief Executive Officer',
               'initials' => 'RP',
               'image'    => '/assets/images/team/rakesh-patel.jpg',
               'bio'      => 'Visionary leader with decades of experience in construction and real estate development across the Southeast. Rakesh sets the strategic direction for Moksha Construction and oversees all operations.',
@@ -172,14 +172,14 @@ require_once __DIR__ . '/includes/header.php';
           ],
           [
               'name'     => 'Hari Patel',
-              'role'     => 'CFO',
+              'role'     => 'Chief Financial Officer',
               'initials' => 'HP',
               'image'    => '/assets/images/team/hari-patel.jpg',
               'bio'      => 'A rising force on the Moksha team, Hari coordinates day-to-day site operations, subcontractor scheduling, and quality control across active projects.',
           ],
           [
               'name'     => 'Parth Patel',
-              'role'     => 'CTO',
+              'role'     => 'Chief Technology Officer',
               'initials' => 'PP',
               'image'    => '/assets/images/team/parth-patel-tech.jpg',
               'bio'      => 'Bridges the gap between construction and technology — implementing BIM workflows, project management systems, and digital tools that keep Moksha ahead of the curve.',
@@ -335,29 +335,19 @@ require_once __DIR__ . '/includes/header.php';
         <p class="section-label">WHERE WE BUILD</p>
         <h2 class="text-[length:var(--text-h2)] font-bold tracking-tight">Serving the Southeast — and Growing</h2>
         <p class="text-text-2 mt-4 text-[length:var(--text-body-lg)]">
-          Headquartered in Clarksville with offices in Nashville and Atlanta.
+          With offices in Nashville and Atlanta — also serving Clarksville and communities across the Southeast.
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-        <!-- Map placeholder -->
+        <!-- Interactive Leaflet Map -->
         <div class="lg:col-span-2 reveal">
-          <div class="rounded-2xl overflow-hidden bg-void border border-[oklch(100%_0_0/0.06)] aspect-[16/9] flex items-center justify-center relative">
-            <!-- Stylized placeholder SVG map -->
-            <div class="absolute inset-0 bg-gradient-to-br from-brand-950 via-base to-void"></div>
-            <div class="relative text-center px-8">
-              <svg class="w-16 h-16 text-accent-400/40 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/>
-              </svg>
-              <p class="text-text-3 text-sm">Interactive map coming soon</p>
-              <p class="text-text-4 text-xs mt-1">Nashville · Clarksville · Atlanta</p>
-            </div>
-            <!-- Location dots overlay -->
-            <div class="absolute top-1/3 left-1/3 w-3 h-3 rounded-full bg-accent-400 shadow-[0_0_12px_oklch(88%_0.24_97/0.6)] animate-pulse"></div>
-            <div class="absolute top-2/5 left-2/5 w-3 h-3 rounded-full bg-accent-400 shadow-[0_0_12px_oklch(88%_0.24_97/0.6)] animate-pulse" style="animation-delay:0.4s"></div>
-            <div class="absolute top-1/2 left-1/2 w-3 h-3 rounded-full bg-brand-400 shadow-[0_0_12px_oklch(62%_0.22_310/0.5)] animate-pulse" style="animation-delay:0.8s"></div>
-          </div>
+          <?php $map_id = 'about-service-map'; $map_height = '460px'; require __DIR__ . '/includes/service-area-map.php'; ?>
+          <p class="mt-4 text-sm text-text-3">
+            <span class="text-accent-400 font-semibold uppercase tracking-wider text-xs mr-1">Also serving:</span>
+            Clarksville, TN | Murfreesboro, TN | Franklin, TN | Decatur, GA | and surrounding communities
+          </p>
         </div>
 
         <!-- Office cards + badge -->
@@ -421,24 +411,32 @@ require_once __DIR__ . '/includes/header.php';
         <p class="text-text-2 mt-3 text-[length:var(--text-body-lg)]">We partner with industry-leading suppliers and manufacturers to guarantee material quality on every project.</p>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center reveal reveal-delay-1">
-        <?php
-        $partners = [
-            ["name" => "Lowe's Pro",     "abbr" => "LP"],
-            ["name" => "Sherwin-Williams","abbr" => "SW"],
-            ["name" => "United Rentals", "abbr" => "UR"],
-            ["name" => "Home Depot Pro", "abbr" => "HD"],
-            ["name" => "Ferguson",       "abbr" => "FG"],
-        ];
-        foreach ($partners as $p): ?>
-          <div class="flex items-center justify-center p-6 rounded-xl border border-[oklch(100%_0_0/0.06)] hover:border-accent-400/30 transition-colors group">
-            <div class="text-center">
-              <div class="w-10 h-10 rounded-lg bg-text-3/10 flex items-center justify-center mx-auto mb-2 group-hover:bg-accent-400/10 transition-colors">
-                <span class="text-xs font-bold text-text-3 group-hover:text-accent-400 transition-colors"><?= $p['abbr'] ?></span>
-              </div>
-              <span class="text-xs text-text-3 group-hover:text-text-2 transition-colors font-medium"><?= $p['name'] ?></span>
-            </div>
-          </div>
+      <?php
+      $partnerLogos = [
+          ['name' => "Lowe's",                       'href' => 'https://lowes.com',          'src' => '/assets/images/partners/lowes.png'],
+          ['name' => 'Sherwin-Williams',             'href' => 'https://sherwin-williams.com','src' => '/assets/images/partners/sherwin-williams.png'],
+          ['name' => 'MSI Surfaces',                 'href' => 'https://msisurfaces.com',    'src' => '/assets/images/partners/msi.svg'],
+          ['name' => 'United Rentals',               'href' => 'https://unitedrentals.com',  'src' => '/assets/images/partners/united-rentals.svg'],
+          ['name' => 'Michael Graves',               'href' => 'https://michaelgraves.com',  'src' => '/assets/images/partners/michael-graves.svg'],
+          ['name' => 'ApeTech',                      'href' => 'https://apete.ch',           'src' => '/assets/images/partners/apetech.svg'],
+      ];
+      ?>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-5 items-stretch reveal reveal-delay-1">
+        <?php foreach ($partnerLogos as $p): ?>
+          <a
+            href="<?= htmlspecialchars($p['href']) ?>"
+            <?= $p['href'] !== '#' ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+            aria-label="<?= htmlspecialchars($p['name']) ?> — Moksha Construction partner"
+            class="partner-logo"
+          >
+            <img
+              src="<?= htmlspecialchars($p['src']) ?>"
+              alt="<?= htmlspecialchars($p['name']) ?>"
+              loading="lazy"
+              width="180"
+              height="80"
+            >
+          </a>
         <?php endforeach; ?>
       </div>
 

@@ -10,12 +10,42 @@
 // Constants
 // ---------------------------------------------------------------------------
 
-define('UPLOAD_MAX_BYTES',   10 * 1024 * 1024); // 10 MB
-define('UPLOAD_ALLOWED_MIME', ['image/jpeg', 'image/png', 'image/webp']);
+define('UPLOAD_MAX_BYTES',   100 * 1024 * 1024); // 100 MB — allows raw/DNG drone files
+define('PROJECT_IMAGE_MAX_BYTES', 400 * 1024);   // 400 KB — TARGET output size after optimization
+define('UPLOAD_ALLOWED_MIME', [
+    // Web formats — handled directly by GD
+    'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+    // Camera/RAW formats — converted to JPEG via Imagick first
+    'image/tiff', 'image/x-tiff',
+    'image/heic', 'image/heif',
+    'image/x-adobe-dng', 'image/x-canon-cr2', 'image/x-canon-cr3',
+    'image/x-nikon-nef', 'image/x-sony-arw', 'image/x-fuji-raf',
+    'image/x-panasonic-rw2', 'image/x-olympus-orf',
+    // Some browsers send these as octet-stream — we sniff the file extension as a fallback
+    'application/octet-stream',
+]);
 
 // Absolute filesystem root for the public directory.
-// __DIR__ resolves to /…/includes — so /../public gives us public/.
-define('PUBLIC_ROOT', realpath(__DIR__ . '/../public'));
+// Local dev:  /repo/public  (includes/ is a sibling of public/)
+// Live server: /home/parths5/moksha.construction/  (includes/ lives INSIDE docroot)
+$_publicCandidates = [
+    __DIR__ . '/../public',  // local dev layout
+    __DIR__ . '/..',         // live server layout (includes/ inside docroot)
+];
+$_publicResolved = null;
+foreach ($_publicCandidates as $_pc) {
+    $_real = realpath($_pc);
+    if ($_real !== false && is_dir($_real . DIRECTORY_SEPARATOR . 'assets')) {
+        $_publicResolved = $_real;
+        break;
+    }
+}
+if ($_publicResolved === null) {
+    // Fallback: trust the second candidate even if assets/ check fails (fresh install)
+    $_publicResolved = realpath(__DIR__ . '/..') ?: __DIR__ . '/..';
+}
+define('PUBLIC_ROOT', $_publicResolved);
+unset($_publicCandidates, $_publicResolved, $_pc, $_real);
 
 // ---------------------------------------------------------------------------
 // Public API
@@ -32,24 +62,46 @@ define('PUBLIC_ROOT', realpath(__DIR__ . '/../public'));
  *
  * @throws RuntimeException  On any validation or processing failure
  */
-function processImage(string $tmpPath, string $destDir, string $filename, int $maxWidth = 2000): string
+function processImage(string $tmpPath, string $destDir, string $filename, int $maxWidth = 2000, ?int $maxBytes = null): string
 {
-    _validateUpload($tmpPath);
+    // $maxBytes here is the SOURCE upload cap; defaults to UPLOAD_MAX_BYTES (100MB).
+    // Output is always squeezed under PROJECT_IMAGE_MAX_BYTES via iterative quality drop.
+    _validateUpload($tmpPath, $maxBytes);
 
     $destDir  = _ensureDir($destDir);
     $filename = _sanitizeFilename($filename);
-    $prefix   = bin2hex(random_bytes(6)); // 12-char hex to prevent overwrites
+    $prefix   = bin2hex(random_bytes(6));
     $outName  = $prefix . '-' . $filename . '.webp';
     $outPath  = $destDir . DIRECTORY_SEPARATOR . $outName;
 
-    $image = _loadImage($tmpPath);
-    $image = _resizeIfNeeded($image, $maxWidth);
+    // Convert non-web formats (DNG/RAW/HEIC/TIFF) to JPEG first via Imagick
+    $workingPath = _ensureGdReadable($tmpPath);
+    $workingIsTemp = $workingPath !== $tmpPath;
 
-    if (!imagewebp($image, $outPath, 85)) {
+    try {
+        $image = _loadImage($workingPath);
+        $image = _resizeIfNeeded($image, $maxWidth);
+
+        // Iterative quality drop until output is under PROJECT_IMAGE_MAX_BYTES
+        $quality = 85;
+        $attempts = 0;
+        do {
+            if (!imagewebp($image, $outPath, $quality)) {
+                imagedestroy($image);
+                throw new RuntimeException("Failed to save WebP image: {$outPath}");
+            }
+            $size = filesize($outPath);
+            if ($size === false || $size <= PROJECT_IMAGE_MAX_BYTES) break;
+            $quality -= 12;
+            $attempts++;
+        } while ($quality >= 30 && $attempts < 6);
+
         imagedestroy($image);
-        throw new RuntimeException("Failed to save WebP image: {$outPath}");
+    } finally {
+        if ($workingIsTemp && is_file($workingPath)) {
+            @unlink($workingPath);
+        }
     }
-    imagedestroy($image);
 
     return _toWebPath($outPath);
 }
@@ -155,27 +207,98 @@ function deleteProjectImages(string $projectDir): void
  *
  * @throws RuntimeException
  */
-function _validateUpload(string $path): void
+function _validateUpload(string $path, ?int $maxBytes = null): void
 {
     if (!is_file($path) || !is_readable($path)) {
         throw new RuntimeException('Uploaded file is missing or not readable.');
     }
 
+    $cap = $maxBytes ?? UPLOAD_MAX_BYTES;
+
     // Size check
     $size = filesize($path);
-    if ($size === false || $size > UPLOAD_MAX_BYTES) {
-        $mb = number_format(UPLOAD_MAX_BYTES / 1048576, 0);
-        throw new RuntimeException("File exceeds the maximum allowed size of {$mb} MB.");
+    if ($size === false || $size > $cap) {
+        $label = $cap >= 1024 * 1024
+            ? number_format($cap / 1048576, 1) . ' MB'
+            : number_format($cap / 1024, 0) . ' KB';
+        $actualMb = $size !== false ? number_format($size / 1048576, 1) . ' MB' : '?';
+        throw new RuntimeException("File too large ({$actualMb}). Max allowed: {$label}.");
     }
 
-    // MIME check using fileinfo — more reliable than $_FILES['type']
+    // MIME check via fileinfo (more reliable than $_FILES['type'])
     $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $mime  = $finfo->file($path);
+    $mime  = $finfo->file($path) ?: 'application/octet-stream';
 
     if (!in_array($mime, UPLOAD_ALLOWED_MIME, true)) {
-        $allowed = implode(', ', UPLOAD_ALLOWED_MIME);
-        throw new RuntimeException("Invalid file type '{$mime}'. Allowed: {$allowed}.");
+        // Some formats (DNG, HEIC, etc.) get reported as octet-stream — accept and let _ensureGdReadable convert
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $rawExts = ['dng', 'cr2', 'cr3', 'nef', 'arw', 'raf', 'rw2', 'orf', 'heic', 'heif', 'tiff', 'tif'];
+        if (!in_array($ext, $rawExts, true)) {
+            throw new RuntimeException("Unsupported file type '{$mime}'. Please upload an image (JPEG, PNG, WebP, HEIC, TIFF, or RAW/DNG).");
+        }
     }
+}
+
+/**
+ * If the source file is in a format GD cannot read (DNG, RAW, HEIC, TIFF, etc.),
+ * convert it to a temporary JPEG using Imagick (preferred) or the `convert` CLI.
+ *
+ * @return string  Either the original $path or a new temp .jpg path that the caller must clean up.
+ * @throws RuntimeException
+ */
+function _ensureGdReadable(string $path): string
+{
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime  = $finfo->file($path) ?: 'application/octet-stream';
+    $ext   = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+    $gdNative = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (in_array($mime, $gdNative, true)) {
+        return $path; // GD can read it directly
+    }
+
+    // Need conversion — try Imagick first, then shell `convert`
+    $tmpJpg = tempnam(sys_get_temp_dir(), 'mok_conv_') . '.jpg';
+
+    if (extension_loaded('imagick')) {
+        try {
+            $im = new Imagick();
+            $im->setResolution(150, 150);
+            $im->readImage($path);
+            $im->setImageFormat('jpeg');
+            $im->setImageCompressionQuality(90);
+            // Auto-rotate based on EXIF
+            if (method_exists($im, 'autoOrient')) {
+                $im->autoOrient();
+            }
+            // Flatten transparency to white
+            $im->setBackgroundColor('white');
+            $im = $im->flattenImages();
+            $im->writeImage($tmpJpg);
+            $im->clear();
+            $im->destroy();
+            return $tmpJpg;
+        } catch (Throwable $e) {
+            error_log('Imagick conversion failed: ' . $e->getMessage());
+            // Fall through to shell convert
+        }
+    }
+
+    if (function_exists('exec')) {
+        $cmd = sprintf('convert %s -auto-orient -background white -flatten -quality 90 %s 2>&1',
+            escapeshellarg($path), escapeshellarg($tmpJpg));
+        $output = [];
+        $rc = 0;
+        @exec($cmd, $output, $rc);
+        if ($rc === 0 && is_file($tmpJpg) && filesize($tmpJpg) > 0) {
+            return $tmpJpg;
+        }
+        error_log('convert CLI failed: ' . implode("\n", $output));
+    }
+
+    // No converter available
+    if (is_file($tmpJpg)) @unlink($tmpJpg);
+    throw new RuntimeException("Cannot read '{$ext}' files on this server. Please upload a JPEG, PNG, or WebP instead.");
 }
 
 /**

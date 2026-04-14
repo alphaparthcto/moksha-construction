@@ -30,7 +30,7 @@ if (!$isAdmin && !$hasPreview) {
   <div class="header-inner">
     <!-- Logo -->
     <a href="/" class="shrink-0" aria-label="Moksha Construction Home">
-      <img src="/assets/images/branding/logo-full-color.svg" alt="Moksha Construction" class="h-14 w-auto" width="280" height="40">
+      <img src="/assets/images/branding/logo-full-color.png" alt="Moksha Construction" class="w-auto" style="height:88px" width="420" height="88">
     </a>
 
     <!-- Desktop Nav -->
@@ -55,15 +55,12 @@ if (!$isAdmin && !$hasPreview) {
 
       <a href="/projects" class="text-sm font-medium text-text-2 hover:text-text transition-colors <?= ($current_page ?? '') === 'projects' ? '!text-accent-400' : '' ?>">Projects</a>
       <a href="/about" class="text-sm font-medium text-text-2 hover:text-text transition-colors <?= ($current_page ?? '') === 'about' ? '!text-accent-400' : '' ?>">About</a>
+      <a href="/subcontractors" class="text-sm font-medium text-text-2 hover:text-text transition-colors <?= ($current_page ?? '') === 'subcontractors' ? '!text-accent-400' : '' ?>">Work With Us</a>
       <a href="/contact" class="text-sm font-medium text-text-2 hover:text-text transition-colors <?= ($current_page ?? '') === 'contact' ? '!text-accent-400' : '' ?>">Contact</a>
     </nav>
 
-    <!-- Phone + CTA (Desktop) -->
+    <!-- CTA (Desktop) -->
     <div class="hidden lg:flex items-center gap-4">
-      <a href="tel:<?= SITE_PHONE_RAW ?>" class="text-sm font-medium text-text-2 hover:text-accent-400 transition-colors" aria-label="Call us">
-        <svg class="w-4 h-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        <?= SITE_PHONE ?>
-      </a>
       <a href="/contact#quote" class="btn-primary text-sm">Get a Free Quote <span aria-hidden="true">→</span></a>
     </div>
 
@@ -83,6 +80,7 @@ if (!$isAdmin && !$hasPreview) {
     <a href="/services/residential-commercial-industrial" class="text-xl text-text-2 hover:text-accent-400 transition-colors" @click="close()">Residential · Commercial · Industrial</a>
     <a href="/projects" class="text-2xl font-bold text-text hover:text-accent-400 transition-colors" @click="close()">Projects</a>
     <a href="/about" class="text-2xl font-bold text-text hover:text-accent-400 transition-colors" @click="close()">About</a>
+    <a href="/subcontractors" class="text-2xl font-bold text-text hover:text-accent-400 transition-colors" @click="close()">Work With Us</a>
     <a href="/contact" class="text-2xl font-bold text-text hover:text-accent-400 transition-colors" @click="close()">Contact</a>
     <div class="mt-4 flex flex-col items-center gap-3">
       <a href="tel:<?= SITE_PHONE_RAW ?>" class="text-lg text-accent-400"><?= SITE_PHONE ?></a>

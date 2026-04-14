@@ -96,9 +96,9 @@ require_once __DIR__ . '/includes/header.php';
           $isWide     = $isLast && $isOddTotal;
         ?>
         <div
-          class="project-card <?= $isWide ? 'md:col-span-2' : '' ?>"
+          class="project-card group <?= $isWide ? 'md:col-span-2' : '' ?>"
           data-type="<?= htmlspecialchars($project['type']) ?>"
-          x-show="activeFilter === 'all' || activeFilter === <?= json_encode($project['type']) ?>"
+          x-show="activeFilter === 'all' || activeFilter === '<?= htmlspecialchars($project['type']) ?>'"
           x-transition:enter="transition ease-out duration-400"
           x-transition:enter-start="opacity-0 scale-95"
           x-transition:enter-end="opacity-100 scale-100"
@@ -120,7 +120,7 @@ require_once __DIR__ . '/includes/header.php';
               <p class="text-sm text-text-3 mb-3">
                 <?= $project['size'] ? htmlspecialchars($project['size']) . ' &middot; ' : '' ?><?= htmlspecialchars($project['location'] ?? '') ?>
               </p>
-              <p class="text-sm text-text-2 leading-relaxed opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 max-w-lg">
+              <p class="text-sm text-text-2 leading-relaxed max-h-0 overflow-hidden opacity-0 translate-y-2 transition-all duration-300 group-hover:max-h-40 group-hover:opacity-100 group-hover:translate-y-0 max-w-lg">
                 <?= htmlspecialchars(mb_substr(strip_tags($project['description'] ?? ''), 0, 200)) ?>
               </p>
             </div>

@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $destDir           = PUBLIC_ROOT . '/assets/images/projects/' . $slug;
                 $newGalleryPaths[] = processImage($tmpPath, $destDir, 'gallery-' . ($i + 1));
             } catch (RuntimeException $e) {
-                error_log('Gallery image #' . ($i + 1) . ' skipped: ' . $e->getMessage());
+                $errors[] = 'Gallery image #' . ($i + 1) . ': ' . $e->getMessage();
             }
         }
     }
@@ -457,7 +457,7 @@ require_once __DIR__ . '/includes/admin-header.php';
   <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
 
   <!-- Two-column layout: main fields on left, sidebar on right -->
-  <div style="display:grid;grid-template-columns:1fr 300px;gap:1.25rem;align-items:start;" class="project-form-grid">
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.25rem;align-items:start;" class="project-form-grid">
 
     <!-- =====================================================================
          LEFT COLUMN
@@ -613,55 +613,57 @@ require_once __DIR__ . '/includes/admin-header.php';
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;opacity:.5"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
                 Drag to reorder &nbsp;&middot;&nbsp; Click <strong style="color:var(--red)">×</strong> to mark for deletion
               </p>
-              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.25rem;">
+              <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start;">
                 <template x-for="(img, index) in images" :key="img.id">
                   <div
                     draggable="true"
                     @dragstart="dragStart(index)"
                     @dragover.prevent="dragOver(index)"
                     @dragend="dragEnd()"
-                    style="position:relative;cursor:grab;transition:transform .15s;"
-                    @mouseover="$el.style.transform='scale(1.02)'"
-                    @mouseout="$el.style.transform=''"
+                    style="flex:0 0 calc(33.333% - .667rem);max-width:calc(33.333% - .667rem);min-width:0;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:var(--raised);cursor:grab;transition:border-color .15s;"
+                    :style="{ borderColor: img.delete ? 'var(--red)' : '' }"
                   >
-                    <!-- Image with rounded corners -->
-                    <img
-                      :src="img.path"
-                      :alt="img.alt || 'Gallery image'"
-                      :style="img.delete
-                        ? 'width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:10px;border:2px solid var(--red);opacity:.4;transition:opacity .2s'
-                        : 'width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:10px;border:2px solid var(--border);transition:opacity .2s'"
-                    >
-
-                    <!-- Order badge — below image -->
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;padding:0 2px;">
-                      <span style="background:rgba(255,233,7,.1);color:var(--gold);font-size:.7rem;font-weight:700;padding:2px 10px;border-radius:4px;line-height:1.6;">
-                        #<span x-text="index + 1"></span>
-                      </span>
-                      <span style="font-size:.65rem;color:var(--text-3);">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
-                        drag
-                      </span>
+                    <!-- Image — full image visible, capped height -->
+                    <div style="position:relative;overflow:hidden;background:#0a0a0f;display:flex;align-items:center;justify-content:center;min-height:100px;max-height:280px;">
+                      <img
+                        :src="img.path"
+                        :alt="img.alt || 'Gallery image'"
+                        style="max-width:100%;max-height:280px;object-fit:contain;display:block;transition:opacity .15s;"
+                        :style="{ opacity: img.delete ? '.25' : '1' }"
+                      >
+                      <div x-show="img.delete" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);">
+                        <span style="color:var(--red);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;">Marked for deletion</span>
+                      </div>
                     </div>
 
-                    <!-- Delete button — top right, outside the overflow -->
-                    <button
-                      type="button"
-                      @click="toggleDelete(index)"
-                      :style="img.delete ? 'background:var(--red);color:#fff;border-color:var(--red)' : 'background:var(--surface);color:var(--text-3);border-color:var(--border-md)'"
-                      style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border:2px solid;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;padding:0;transition:background .15s,color .15s;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.4);"
-                      @mouseover="$el.style.background='var(--red)';$el.style.color='#fff';$el.style.borderColor='var(--red)'"
-                      @mouseout="!img.delete && ($el.style.background='var(--surface)', $el.style.color='var(--text-3)', $el.style.borderColor='var(--border-md)')"
-                      :title="img.delete ? 'Undo delete' : 'Mark for deletion'"
-                    >×</button>
+                    <!-- File info -->
+                    <div style="padding:.375rem .5rem;border-top:1px solid rgba(255,255,255,.06);">
+                      <div style="display:flex;align-items:center;gap:.375rem;margin-bottom:.3rem;">
+                        <span style="color:var(--gold);font-size:.6rem;font-weight:700;">#<span x-text="index+1"></span></span>
+                        <span style="font-size:.6rem;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;" x-text="img.name"></span>
+                        <span style="font-size:.6rem;color:var(--text-3);white-space:nowrap;" x-text="fmtSize(img.size)"></span>
+                      </div>
+                      <!-- Action buttons -->
+                      <div style="display:flex;gap:.25rem;flex-wrap:wrap;">
+                        <a :href="img.path" download :title="'Download ' + img.name" class="mok-img-btn" @click.stop>
+                          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        </a>
+                        <button type="button" x-show="!img.delete" @click="cropExisting(img,index)" class="mok-img-btn" title="Crop">
+                          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2v14a2 2 0 002 2h14"/><path d="M18 22V8a2 2 0 00-2-2H2"/></svg>
+                        </button>
+                        <button type="button" x-show="!img.delete" @click="optimizeExisting(img,index)" class="mok-img-btn" title="Re-optimize (resize + compress)">
+                          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </button>
+                        <span style="flex:1"></span>
+                        <button type="button" @click="toggleDelete(index)" :class="img.delete ? 'mok-img-btn mok-img-btn--undo' : 'mok-img-btn mok-img-btn--del'" :title="img.delete ? 'Undo' : 'Delete'">
+                          <template x-if="!img.delete"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></template>
+                          <template x-if="img.delete"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></template>
+                        </button>
+                      </div>
+                    </div>
 
-                    <!-- Hidden inputs -->
-                    <template x-if="!img.delete">
-                      <input type="hidden" name="image_order[]" :value="img.id">
-                    </template>
-                    <template x-if="img.delete">
-                      <input type="hidden" name="delete_images[]" :value="img.id">
-                    </template>
+                    <template x-if="!img.delete"><input type="hidden" name="image_order[]" :value="img.id"></template>
+                    <template x-if="img.delete"><input type="hidden" name="delete_images[]" :value="img.id"></template>
                   </div>
                 </template>
               </div>
@@ -681,14 +683,10 @@ require_once __DIR__ . '/includes/admin-header.php';
           <h2 class="card-title">Add New Photos</h2>
         </div>
         <div class="card-body" x-data="galleryPreviewer()">
-          <p style="font-size:.8125rem;color:var(--text-3);margin-bottom:1rem;">
-            Upload additional project photos. JPEG, PNG, or WebP — max 10 MB each. New images will appear after existing ones.
-          </p>
-
           <!-- Drop zone -->
           <div
-            style="border:2px dashed;border-radius:var(--radius-md);padding:2rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;"
-            :style="dragOver ? 'border-color:var(--gold);background:var(--gold-glow)' : 'border-color:rgba(255,255,255,.12);background:transparent'"
+            style="border:2px dashed rgba(255,255,255,.10);border-radius:12px;padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;"
+            :style="{ borderColor: dragOver ? 'var(--gold)' : '', background: dragOver ? 'rgba(201,162,95,.06)' : '' }"
             @dragover.prevent="dragOver = true"
             @dragleave.prevent="dragOver = false"
             @drop.prevent="handleDrop($event)"
@@ -698,20 +696,35 @@ require_once __DIR__ . '/includes/admin-header.php';
             @keypress.enter.space.prevent="$refs.galleryInput.click()"
             aria-label="Upload gallery images"
           >
-            <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color:var(--text-3);margin:0 auto .75rem;display:block;">
-              <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                 style="margin:0 auto 1rem;display:block;transition:color .2s"
+                 :style="{ color: dragOver ? 'var(--gold)' : 'var(--text-3)' }">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
-            <p style="font-size:.9375rem;color:var(--text);margin-bottom:.25rem;">
-              Drop photos here or <span style="color:var(--gold);text-decoration:underline;cursor:pointer;">click to browse</span>
+            <p style="font-size:.9375rem;font-weight:600;color:var(--text);margin-bottom:.25rem;"
+               x-text="dragOver ? 'Release to upload' : 'Drag & drop photos here'">Drag & drop photos here</p>
+            <p style="font-size:.8125rem;color:var(--text-3);">
+              or <span style="color:var(--gold);font-weight:500;">browse files</span>
+              <span style="margin:0 .375rem;opacity:.3">·</span>
+              Any format, any size
             </p>
-            <p style="font-size:.75rem;color:var(--text-3);">JPEG &middot; PNG &middot; WebP &nbsp;|&nbsp; Max 10 MB per file</p>
+
+            <!-- Optimizing overlay -->
+            <div x-show="optimizing" x-cloak style="position:absolute;inset:0;background:rgba(13,5,16,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;backdrop-filter:blur(4px);">
+              <svg style="width:28px;height:28px;color:var(--gold);animation:mokspin .8s linear infinite;margin-bottom:.625rem" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path d="M21 12a9 9 0 11-6.219-8.56"/>
+              </svg>
+              <span style="color:var(--gold);font-size:.8125rem;font-weight:600;">Optimizing<span x-show="optimizing_count > 0"> (<span x-text="optimizing_count"></span> remaining)</span>...</span>
+            </div>
           </div>
 
           <input
             type="file"
             id="gallery_images"
             name="gallery_images[]"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*,.dng,.cr2,.cr3,.nef,.arw,.raf,.rw2,.orf,.heic,.heif,.tiff,.tif"
             multiple
             style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0,0,0,0);"
             x-ref="galleryInput"
@@ -722,26 +735,41 @@ require_once __DIR__ . '/includes/admin-header.php';
           <div
             x-show="previews.length > 0"
             x-cloak
-            style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.75rem;margin-top:1rem;"
+            style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-top:1.25rem;"
           >
             <template x-for="(preview, index) in previews" :key="index">
-              <div style="position:relative;border-radius:var(--radius-sm);overflow:hidden;background:var(--raised);aspect-ratio:1;">
-                <img :src="preview.url" :alt="'New image ' + (index + 1)" style="width:100%;height:100%;object-fit:cover;display:block;">
+              <div style="position:relative;border-radius:10px;overflow:hidden;background:var(--raised);border:1px solid rgba(255,255,255,.06);">
+                <!-- Image -->
+                <div style="aspect-ratio:4/3;overflow:hidden;">
+                  <img :src="preview.url" :alt="'New image ' + (index + 1)" style="width:100%;height:100%;object-fit:cover;display:block;">
+                </div>
+
+                <!-- Remove button -->
                 <button
                   type="button"
-                  style="position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:background .15s;"
+                  style="position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:background .15s;z-index:2;"
                   @click.prevent="removePreview(index)"
                   :title="'Remove ' + preview.name"
                   @mouseover="$el.style.background='var(--red)'"
-                  @mouseout="$el.style.background='rgba(0,0,0,.75)'"
+                  @mouseout="$el.style.background='rgba(0,0,0,.8)'"
                   aria-label="Remove image"
                 >
                   <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <span
-                  style="position:absolute;bottom:0;left:0;right:0;font-size:.6rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:.375rem .375rem .25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
-                  x-text="preview.name"
-                ></span>
+
+                <!-- Optimized badge -->
+                <template x-if="preview.optimized">
+                  <span style="position:absolute;top:6px;left:6px;background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3);font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:4px;backdrop-filter:blur(4px);">OPTIMIZED</span>
+                </template>
+
+                <!-- Metadata footer -->
+                <div style="padding:.5rem .625rem;display:flex;flex-direction:column;gap:.2rem;">
+                  <span style="font-size:.65rem;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;" x-text="preview.name"></span>
+                  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                    <span x-show="preview.sizeMsg" style="font-size:.6rem;color:var(--text-3);" x-text="preview.sizeMsg"></span>
+                    <span x-show="preview.dims" style="font-size:.6rem;color:var(--text-3);" x-text="preview.dims"></span>
+                  </div>
+                </div>
               </div>
             </template>
           </div>
@@ -944,26 +972,55 @@ require_once __DIR__ . '/includes/admin-header.php';
             Cover photo shown on the projects listing and detail page. Max 10 MB.
           </p>
 
-          <?php if (!empty($project['featured_image'])): ?>
+          <?php if (!empty($project['featured_image'])):
+            $featAbsPath = PUBLIC_ROOT . $project['featured_image'];
+            $featFileSize = is_file($featAbsPath) ? filesize($featAbsPath) : 0;
+          ?>
           <!-- Current image — shown until a new file is selected -->
           <div x-show="!previewUrl" style="margin-bottom:.75rem;">
-            <p style="font-size:.75rem;color:var(--text-3);margin-bottom:.5rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;">Current Image</p>
-            <div style="width:100%;aspect-ratio:16/9;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:.375rem;margin-bottom:.5rem;">
+              <p style="font-size:.75rem;color:var(--text-3);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin:0;">Current Image</p>
+              <span style="font-size:.6875rem;color:var(--text-3);margin-left:auto;" id="featuredSizeLabel"><?= $featFileSize ? number_format($featFileSize / 1024) . ' KB' : '' ?></span>
+            </div>
+            <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);">
               <img
+                id="currentFeaturedImg"
                 src="<?= e((string)$project['featured_image']) ?>"
                 alt="Current featured image"
                 style="width:100%;height:100%;object-fit:cover;display:block;"
               >
             </div>
-            <button
-              type="button"
-              class="btn btn-ghost"
-              style="margin-top:.625rem;padding:.375rem .75rem;font-size:.8125rem;width:100%;justify-content:center;"
-              @click="$refs.featuredInput.click()"
-            >
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-              Change Image
-            </button>
+            <div style="display:flex;gap:.5rem;margin-top:.625rem;">
+              <button
+                type="button"
+                class="btn btn-ghost"
+                style="padding:.375rem .75rem;font-size:.8125rem;flex:1;justify-content:center;"
+                @click="cropExistingFeatured()"
+                title="Crop the current featured image"
+              >
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 002 2h14"/><path d="M18 22V8a2 2 0 00-2-2H2"/></svg>
+                Crop
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost"
+                style="padding:.375rem .75rem;font-size:.8125rem;flex:1;justify-content:center;"
+                @click="optimizeExistingFeatured()"
+                title="Re-optimize (resize + compress)"
+              >
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                Optimize
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost"
+                style="padding:.375rem .75rem;font-size:.8125rem;flex:1;justify-content:center;"
+                @click="$refs.featuredInput.click()"
+              >
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Replace
+              </button>
+            </div>
           </div>
           <?php endif; ?>
 
@@ -1001,7 +1058,7 @@ require_once __DIR__ . '/includes/admin-header.php';
             type="file"
             id="featured_image"
             name="featured_image"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*,.dng,.cr2,.cr3,.nef,.arw,.raf,.rw2,.orf,.heic,.heif,.tiff,.tif"
             style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0,0,0,0);"
             x-ref="featuredInput"
             @change="handleFile($event.target.files[0])"
@@ -1020,8 +1077,18 @@ require_once __DIR__ . '/includes/admin-header.php';
             <span style="font-size:.75rem;color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;" x-text="filename"></span>
           </div>
 
-          <p class="form-hint" x-show="!previewUrl">
-            JPEG, PNG, or WebP. Resized to max 2,000 px wide.
+          <p class="form-hint" x-show="!previewUrl && !optimizing">
+            Any image — JPEG, PNG, WebP, HEIC, drone DNG/RAW.<br>
+            <span style="color:var(--gold)">✓ Crop it yourself in the popup · Auto-resized &amp; compressed</span>
+          </p>
+          <p class="form-hint" x-show="optimizing" x-cloak style="color:var(--gold)">
+            <svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+              <path d="M21 12a9 9 0 11-6.219-8.56" style="animation:mokspin 1s linear infinite;transform-origin:center"/>
+            </svg>
+            Optimizing image...
+          </p>
+          <p class="form-hint" x-show="optimizedMsg && !optimizing" x-cloak style="color:var(--green)">
+            ✓ <span x-text="optimizedMsg"></span>
           </p>
 
         </div>
@@ -1034,10 +1101,321 @@ require_once __DIR__ . '/includes/admin-header.php';
 
 </form>
 
+<style>
+/* ===== Cropper.js modal (Moksha-themed) ===== */
+.mok-crop-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  animation: mokFadeIn .15s ease-out;
+}
+@keyframes mokFadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes mokspin   { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+.mok-crop-modal {
+  background: var(--raised, #1a1320);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  width: 100%; max-width: 900px;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+}
+.mok-crop-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.mok-crop-header h3 { margin: 0; font-size: 1rem; font-weight: 600; color: var(--text); }
+.mok-crop-close {
+  background: none; border: none; color: var(--text-3); font-size: 2rem;
+  line-height: 1; cursor: pointer; padding: 0; width: 32px; height: 32px;
+}
+.mok-crop-close:hover { color: var(--text); }
+.mok-crop-body {
+  flex: 1; padding: 1rem; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 50vh; max-height: 65vh;
+}
+.mok-crop-img { max-width: 100%; max-height: 100%; display: block; }
+.mok-crop-footer {
+  padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.mok-crop-aspect { display: flex; gap: .375rem; flex-wrap: wrap; }
+.mok-crop-aspect button {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+  color: var(--text-2); padding: .375rem .75rem; border-radius: 6px;
+  font-size: .75rem; cursor: pointer; transition: all .15s;
+  font-weight: 500; letter-spacing: .02em;
+}
+.mok-crop-aspect button:hover { color: var(--text); border-color: rgba(255,255,255,.18); }
+.mok-crop-aspect button.active {
+  background: var(--gold, #c9a25f); color: #000; border-color: var(--gold, #c9a25f);
+}
+.mok-crop-actions { display: flex; gap: .5rem; }
+.mok-crop-cancel, .mok-crop-apply {
+  padding: .5rem 1rem; border-radius: 6px; font-size: .8125rem; font-weight: 600;
+  cursor: pointer; transition: all .15s; border: 1px solid;
+}
+.mok-crop-cancel {
+  background: rgba(255,255,255,.04); color: var(--text-2);
+  border-color: rgba(255,255,255,.08);
+}
+.mok-crop-cancel:hover { color: var(--text); }
+.mok-crop-apply {
+  background: var(--gold, #c9a25f); color: #000;
+  border-color: var(--gold, #c9a25f);
+}
+.mok-crop-apply:hover { filter: brightness(1.1); }
+
+/* Gallery tile action buttons */
+.mok-img-btn {
+  background: rgba(255,255,255,.05);
+  color: var(--text-3);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 5px;
+  padding: .2rem .45rem;
+  font-size: .6rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .2rem;
+  transition: all .15s;
+  line-height: 1;
+}
+.mok-img-btn:hover {
+  background: var(--gold);
+  color: #000;
+  border-color: var(--gold);
+}
+.mok-img-btn--del {
+  color: var(--red);
+  border-color: rgba(248,113,113,.15);
+  background: rgba(248,113,113,.06);
+}
+.mok-img-btn--del:hover {
+  background: var(--red) !important;
+  color: #fff !important;
+  border-color: var(--red) !important;
+}
+.mok-img-btn--undo {
+  color: var(--green);
+  border-color: rgba(52,211,153,.2);
+  background: rgba(52,211,153,.06);
+}
+.mok-img-btn--undo:hover {
+  background: var(--green) !important;
+  color: #000 !important;
+  border-color: var(--green) !important;
+}
+</style>
+
 <script>
 // ============================================================================
 // Alpine.js components — project edit form
 // ============================================================================
+
+/**
+ * Browser-readable image MIME types (handled client-side).
+ * Other formats (DNG/RAW/HEIC/TIFF) are uploaded as-is and converted server-side.
+ */
+const BROWSER_READABLE_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+function isBrowserReadable(file) {
+  return file && BROWSER_READABLE_MIME.includes(file.type);
+}
+
+/**
+ * Client-side image optimizer for browser-readable formats.
+ * Resizes to max 2000px wide and recompresses as JPEG until under 380 KB.
+ * Returns a new File. Skips non-browser formats (server will handle).
+ */
+async function optimizeImage(file, maxWidth = 2000, targetBytes = 380 * 1024) {
+  if (!isBrowserReadable(file)) return file; // server will convert + optimize
+
+  const dataUrl = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload  = () => res(i);
+    i.onerror = rej;
+    i.src = dataUrl;
+  });
+
+  if (file.size <= targetBytes && img.width <= maxWidth) {
+    return file;
+  }
+
+  let w = img.width, h = img.height;
+  if (w > maxWidth) {
+    h = Math.round(h * (maxWidth / w));
+    w = maxWidth;
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width  = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.drawImage(img, 0, 0, w, h);
+
+  let q = 0.85;
+  let blob = null;
+  for (let i = 0; i < 6; i++) {
+    blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', q));
+    if (!blob) break;
+    if (blob.size <= targetBytes) break;
+    q -= 0.12;
+    if (q < 0.35) break;
+  }
+
+  if (!blob) return file;
+
+  const newName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+  return new File([blob], newName, { type: 'image/jpeg', lastModified: Date.now() });
+}
+
+/**
+ * Crop a File using Cropper.js. Returns a Promise that resolves with a cropped File,
+ * or rejects if the user cancels.
+ *
+ * @param {File}    file
+ * @param {number}  aspectRatio  e.g. 16/9, or NaN for free crop
+ * @param {string}  modalTitle
+ */
+function cropImage(file, aspectRatio = NaN, modalTitle = 'Crop Image') {
+  return new Promise((resolve, reject) => {
+    if (!isBrowserReadable(file)) {
+      // RAW/DNG/HEIC — can't preview in browser, skip cropping
+      resolve(file);
+      return;
+    }
+
+    ensureCropperLoaded().then(() => {
+      const url = URL.createObjectURL(file);
+
+      // Build modal
+      const overlay = document.createElement('div');
+      overlay.className = 'mok-crop-overlay';
+      overlay.innerHTML = `
+        <div class="mok-crop-modal">
+          <div class="mok-crop-header">
+            <h3>${modalTitle}</h3>
+            <button type="button" class="mok-crop-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="mok-crop-body">
+            <img class="mok-crop-img" src="${url}" alt="">
+          </div>
+          <div class="mok-crop-footer">
+            <div class="mok-crop-aspect">
+              <button type="button" data-ratio="NaN">Free</button>
+              <button type="button" data-ratio="${16/9}">16:9</button>
+              <button type="button" data-ratio="${4/3}">4:3</button>
+              <button type="button" data-ratio="1">1:1</button>
+              <button type="button" data-ratio="${3/2}">3:2</button>
+            </div>
+            <div class="mok-crop-actions">
+              <button type="button" class="mok-crop-cancel">Skip Crop</button>
+              <button type="button" class="mok-crop-apply">Apply Crop</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      const imgEl = overlay.querySelector('.mok-crop-img');
+      let cropper;
+
+      imgEl.onload = () => {
+        cropper = new Cropper(imgEl, {
+          aspectRatio: aspectRatio,
+          viewMode: 1,
+          background: false,
+          responsive: true,
+          autoCropArea: 0.95,
+        });
+
+        // Highlight active aspect ratio button
+        overlay.querySelectorAll('[data-ratio]').forEach(btn => {
+          const r = parseFloat(btn.dataset.ratio);
+          if ((isNaN(aspectRatio) && btn.dataset.ratio === 'NaN') || r === aspectRatio) {
+            btn.classList.add('active');
+          }
+          btn.addEventListener('click', () => {
+            const newR = btn.dataset.ratio === 'NaN' ? NaN : parseFloat(btn.dataset.ratio);
+            cropper.setAspectRatio(newR);
+            overlay.querySelectorAll('[data-ratio]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      };
+
+      const cleanup = () => {
+        if (cropper) cropper.destroy();
+        URL.revokeObjectURL(url);
+        overlay.remove();
+      };
+
+      overlay.querySelector('.mok-crop-close').onclick  = () => { cleanup(); reject(new Error('cancelled')); };
+      overlay.querySelector('.mok-crop-cancel').onclick = () => { cleanup(); resolve(file); };
+      overlay.querySelector('.mok-crop-apply').onclick  = () => {
+        if (!cropper) { cleanup(); resolve(file); return; }
+        const canvas = cropper.getCroppedCanvas({ maxWidth: 4000, maxHeight: 4000 });
+        canvas.toBlob(blob => {
+          if (!blob) { cleanup(); resolve(file); return; }
+          const newName = file.name.replace(/\.[^.]+$/, '') + '-cropped.jpg';
+          const newFile = new File([blob], newName, { type: 'image/jpeg', lastModified: Date.now() });
+          cleanup();
+          resolve(newFile);
+        }, 'image/jpeg', 0.92);
+      };
+    }).catch(err => {
+      console.error('Cropper failed to load', err);
+      resolve(file); // graceful fallback — skip crop
+    });
+  });
+}
+
+let _cropperLoadingPromise = null;
+function ensureCropperLoaded() {
+  if (window.Cropper) return Promise.resolve();
+  if (_cropperLoadingPromise) return _cropperLoadingPromise;
+  _cropperLoadingPromise = new Promise((res, rej) => {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css';
+    document.head.appendChild(css);
+
+    const js = document.createElement('script');
+    js.src = 'https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js';
+    js.onload  = res;
+    js.onerror = rej;
+    document.head.appendChild(js);
+  });
+  return _cropperLoadingPromise;
+}
+
+function fmtSize(bytes) {
+  if (bytes >= 1024 * 1024) return (bytes / 1048576).toFixed(1) + ' MB';
+  return Math.round(bytes / 1024) + ' KB';
+}
+
+function getImageDims(url) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload  = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
 
 function projectForm() {
   return {
@@ -1068,13 +1446,22 @@ function projectForm() {
 
 function galleryReorder() {
   return {
-    images: <?= json_encode(array_map(fn($img) => [
-        'id'     => $img['id'],
-        'path'   => $img['image_path'],
-        'alt'    => $img['alt_text'] ?? '',
-        'delete' => false,
-    ], $existingGallery)) ?>,
+    images: <?= json_encode(array_map(function($img) {
+        $path = $img['image_path'] ?? '';
+        $absPath = PUBLIC_ROOT . $path;
+        $size = is_file($absPath) ? filesize($absPath) : 0;
+        $fname = basename($path);
+        return [
+            'id'     => $img['id'],
+            'path'   => $path,
+            'alt'    => $img['alt_text'] ?? '',
+            'delete' => false,
+            'name'   => $fname,
+            'size'   => $size,
+        ];
+    }, $existingGallery)) ?>,
     dragIndex: null,
+    projectId: <?= (int)$project['id'] ?>,
 
     dragStart(index) { this.dragIndex = index; },
     dragOver(index) {
@@ -1085,60 +1472,296 @@ function galleryReorder() {
     },
     dragEnd() { this.dragIndex = null; },
     toggleDelete(index) { this.images[index].delete = !this.images[index].delete; },
+
+    async cropExisting(img, index) {
+      try {
+        // Fetch existing image as a File
+        const file = await fetchImageAsFile(img.path);
+
+        // Open Cropper modal
+        let cropped;
+        try {
+          cropped = await cropImage(file, NaN, 'Crop Existing Image');
+        } catch (e) {
+          return; // user cancelled
+        }
+        if (cropped === file) return; // they hit Skip
+
+        // Optimize the cropped result
+        const optimized = await optimizeImage(cropped);
+
+        // Upload to /api/crop-image.php
+        const fd = new FormData();
+        fd.append('image_type', 'gallery');
+        fd.append('project_id', this.projectId);
+        fd.append('image_id', img.id);
+        fd.append('image', optimized);
+
+        const res = await fetch('/api/crop-image.php', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success && data.new_path) {
+          // Update the image path locally to show new version (cache-bust with timestamp)
+          this.images[index].path = data.new_path + '?t=' + Date.now();
+        } else {
+          alert('Crop failed: ' + (data.error || 'unknown error'));
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Could not crop image: ' + err.message);
+      }
+    },
+
+    async optimizeExisting(img, index) {
+      try {
+        const file = await fetchImageAsFile(img.path);
+        const originalSize = file.size;
+
+        const optimized = await optimizeImage(file);
+        if (optimized === file) {
+          alert('Image is already optimized (' + fmtSize(originalSize) + ').');
+          return;
+        }
+
+        // Upload optimized version via crop API (reuses same endpoint)
+        const fd = new FormData();
+        fd.append('image_type', 'gallery');
+        fd.append('project_id', this.projectId);
+        fd.append('image_id', img.id);
+        fd.append('image', optimized);
+
+        const res = await fetch('/api/crop-image.php', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success && data.new_path) {
+          this.images[index].path = data.new_path + '?t=' + Date.now();
+          this.images[index].name = optimized.name;
+          this.images[index].size = optimized.size;
+          alert('Optimized: ' + fmtSize(originalSize) + ' → ' + fmtSize(optimized.size));
+        } else {
+          alert('Optimize failed: ' + (data.error || 'unknown error'));
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Could not optimize image: ' + err.message);
+      }
+    },
   };
 }
 
+/**
+ * Fetch a server image URL and return it as a browser-readable File.
+ * Used by "Crop Existing" handlers.
+ */
+async function fetchImageAsFile(url) {
+  // Strip cache-busting query params for the fetch
+  const cleanUrl = url.split('?')[0];
+  const res = await fetch(cleanUrl, { cache: 'reload' });
+  if (!res.ok) throw new Error('Failed to fetch image: ' + res.status);
+  const blob = await res.blob();
+  // Pull a sensible filename from the URL
+  const name = cleanUrl.split('/').pop() || 'image.jpg';
+  // Coerce MIME to a browser-readable type if possible
+  const type = blob.type || 'image/jpeg';
+  return new File([blob], name, { type, lastModified: Date.now() });
+}
+
+/**
+ * Top-level handler for cropping the existing featured image.
+ * Called by the Alpine button outside of any specific component (uses x-data on body or just plain function).
+ * We expose it via window for the inline @click handler.
+ */
+window.cropExistingFeatured = async function() {
+  try {
+    const imgEl = document.getElementById('currentFeaturedImg');
+    if (!imgEl) return;
+    const projectId = <?= (int)$project['id'] ?>;
+
+    const file = await fetchImageAsFile(imgEl.src);
+
+    let cropped;
+    try {
+      cropped = await cropImage(file, 16/9, 'Crop Featured Image');
+    } catch (e) {
+      return; // cancelled
+    }
+    if (cropped === file) return;
+
+    const optimized = await optimizeImage(cropped);
+
+    const fd = new FormData();
+    fd.append('image_type', 'featured');
+    fd.append('project_id', projectId);
+    fd.append('image', optimized);
+
+    const res = await fetch('/api/crop-image.php', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.success && data.new_path) {
+      imgEl.src = data.new_path + '?t=' + Date.now();
+      const sizeLabel = document.getElementById('featuredSizeLabel');
+      if (sizeLabel) sizeLabel.textContent = fmtSize(optimized.size);
+    } else {
+      alert('Crop failed: ' + (data.error || 'unknown error'));
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Could not crop image: ' + err.message);
+  }
+};
+
+window.optimizeExistingFeatured = async function() {
+  try {
+    const imgEl = document.getElementById('currentFeaturedImg');
+    if (!imgEl) return;
+    const projectId = <?= (int)$project['id'] ?>;
+
+    const file = await fetchImageAsFile(imgEl.src);
+    const originalSize = file.size;
+
+    const optimized = await optimizeImage(file);
+    if (optimized === file) {
+      alert('Image is already optimized (' + fmtSize(originalSize) + ').');
+      return;
+    }
+
+    const fd = new FormData();
+    fd.append('image_type', 'featured');
+    fd.append('project_id', projectId);
+    fd.append('image', optimized);
+
+    const res = await fetch('/api/crop-image.php', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.success && data.new_path) {
+      imgEl.src = data.new_path + '?t=' + Date.now();
+      const sizeLabel = document.getElementById('featuredSizeLabel');
+      if (sizeLabel) sizeLabel.textContent = fmtSize(optimized.size);
+      alert('Optimized: ' + fmtSize(originalSize) + ' → ' + fmtSize(optimized.size));
+    } else {
+      alert('Optimize failed: ' + (data.error || 'unknown error'));
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Could not optimize image: ' + err.message);
+  }
+};
+
 function featuredPreviewer() {
   return {
-    previewUrl: null,
-    filename:   '',
-    dragOver:   false,
+    previewUrl:   null,
+    filename:     '',
+    dragOver:     false,
+    optimizing:   false,
+    optimizedMsg: '',
 
-    handleFile(file) {
-      if (!file || !this.isValid(file)) {
-        if (file) alert('Please select a JPEG, PNG, or WebP image under 10 MB.');
-        return;
+    async handleFile(file) {
+      if (!file) return;
+      this.optimizing   = true;
+      this.optimizedMsg = '';
+      this.filename     = file.name;
+
+      try {
+        const originalSize = file.size;
+
+        // Step 1: Crop (browser-readable formats only)
+        let working = file;
+        try {
+          working = await cropImage(file, 16/9, 'Crop Featured Image');
+        } catch (e) { /* user cancelled — abort */
+          this.optimizing = false;
+          this.filename   = '';
+          return;
+        }
+
+        // Step 2: Optimize
+        const optimized = await optimizeImage(working);
+
+        // Inject into file input
+        const dt = new DataTransfer();
+        dt.items.add(optimized);
+        this.$refs.featuredInput.files = dt.files;
+
+        if (this.previewUrl) URL.revokeObjectURL(this.previewUrl);
+        this.previewUrl   = URL.createObjectURL(optimized);
+        this.optimizedMsg = optimized === file
+          ? `${fmtSize(originalSize)}`
+          : `${fmtSize(originalSize)} → ${fmtSize(optimized.size)}`;
+      } catch (err) {
+        console.error(err);
+        alert('Could not process image — please try a different file.');
+      } finally {
+        this.optimizing = false;
       }
-      this.filename   = file.name;
-      this.previewUrl = URL.createObjectURL(file);
     },
 
     handleDrop(event) {
       this.dragOver = false;
       const file = event.dataTransfer.files[0];
       if (!file) return;
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      this.$refs.featuredInput.files = dt.files;
       this.handleFile(file);
     },
 
     clearPreview() {
       if (this.previewUrl) URL.revokeObjectURL(this.previewUrl);
-      this.previewUrl = null;
-      this.filename   = '';
+      this.previewUrl   = null;
+      this.filename     = '';
+      this.optimizedMsg = '';
       this.$refs.featuredInput.value = '';
-    },
-
-    isValid(file) {
-      const ok = ['image/jpeg', 'image/png', 'image/webp'];
-      return ok.includes(file.type) && file.size <= 10 * 1024 * 1024;
     },
   };
 }
 
 function galleryPreviewer() {
   return {
-    previews: [],
-    allFiles: [],
-    dragOver: false,
+    previews:         [],
+    allFiles:         [],
+    dragOver:         false,
+    optimizing:       false,
+    optimizing_count: 0,
 
-    handleFiles(fileList) {
-      Array.from(fileList).forEach(file => {
-        if (!this.isValid(file)) return;
-        this.previews.push({ url: URL.createObjectURL(file), name: file.name });
-        this.allFiles.push(file);
-      });
+    async handleFiles(fileList) {
+      const files = Array.from(fileList);
+      if (files.length === 0) return;
+
+      this.optimizing       = true;
+      this.optimizing_count = files.length;
+
+      for (const file of files) {
+        const originalSize = file.size;
+        try {
+          // Step 1: Crop (free aspect)
+          let working = file;
+          try {
+            working = await cropImage(file, NaN, 'Crop Gallery Image (' + file.name + ')');
+          } catch (e) {
+            // User cancelled this image — skip to next
+            this.optimizing_count--;
+            continue;
+          }
+
+          // Step 2: Optimize
+          const optimized = await optimizeImage(working);
+
+          const previewUrl = URL.createObjectURL(optimized);
+          const wasOptimized = optimized !== file;
+
+          // Get dimensions from the optimized file
+          const dims = await getImageDims(previewUrl);
+
+          this.previews.push({
+            url:       previewUrl,
+            name:      optimized.name,
+            sizeMsg:   wasOptimized
+                         ? fmtSize(originalSize) + ' → ' + fmtSize(optimized.size)
+                         : fmtSize(originalSize),
+            dims:      dims ? dims.w + ' × ' + dims.h + 'px' : '',
+            optimized: wasOptimized,
+          });
+          this.allFiles.push(optimized);
+        } catch (err) {
+          console.error('Optimize failed for', file.name, err);
+        }
+        this.optimizing_count--;
+      }
+
+      this.optimizing = false;
       this.syncInput();
     },
 
@@ -1158,11 +1781,6 @@ function galleryPreviewer() {
       const dt = new DataTransfer();
       this.allFiles.forEach(f => dt.items.add(f));
       this.$refs.galleryInput.files = dt.files;
-    },
-
-    isValid(file) {
-      const ok = ['image/jpeg', 'image/png', 'image/webp'];
-      return ok.includes(file.type) && file.size <= 10 * 1024 * 1024;
     },
   };
 }

@@ -56,6 +56,19 @@ try {
     $subCounts = ['total' => 0, 'unread' => 0, 'resolved' => 0];
 }
 
+// ---- Data: subcontractor application counts ----
+try {
+    $scCounts = $db->query("
+        SELECT COUNT(*) AS total,
+            SUM(status = 'new')       AS new,
+            SUM(status = 'reviewing') AS reviewing,
+            SUM(status = 'approved')  AS approved
+        FROM subcontractor_submissions WHERE status != 'deleted'
+    ")->fetch();
+} catch (PDOException $e) {
+    $scCounts = ['total' => 0, 'new' => 0, 'reviewing' => 0, 'approved' => 0];
+}
+
 // ---- Data: maintenance mode ----
 $stmt = $db->prepare("SELECT setting_value FROM settings WHERE setting_key = 'maintenance_mode' LIMIT 1");
 $stmt->execute();
@@ -80,6 +93,16 @@ try {
     ")->fetchAll();
 } catch (PDOException $e) {
     $recentSubs = [];
+}
+
+// ---- Data: recent subcontractor applications (latest 5) ----
+try {
+    $recentSubcontractors = $db->query("
+        SELECT * FROM subcontractor_submissions
+        WHERE status = 'new' ORDER BY created_at DESC LIMIT 5
+    ")->fetchAll();
+} catch (PDOException $e) {
+    $recentSubcontractors = [];
 }
 
 // ---- Data: total activity count ----
@@ -135,8 +158,8 @@ require_once __DIR__ . '/includes/admin-header.php';
   </div>
 </div>
 
-<!-- Section 2: Stats Grid (6 tiles) -->
-<div class="stats-grid" style="grid-template-columns:repeat(6,1fr)">
+<!-- Section 2: Stats Grid (7 tiles) -->
+<div class="stats-grid" style="grid-template-columns:repeat(7,1fr)">
 
   <!-- 1. Total Projects -->
   <a href="/admin/projects.php" class="stat-card" style="text-decoration:none;display:flex;flex-direction:column">
@@ -193,6 +216,27 @@ require_once __DIR__ . '/includes/admin-header.php';
     <div class="stat-card-number" style="color:var(--text-3)"><?= (int)($subCounts['resolved'] ?? 0) ?></div>
     <div class="stat-card-label">Resolved</div>
   </div>
+
+  <!-- 4b. Subcontractor Applications -->
+  <a href="/admin/subcontractors.php" class="stat-card" style="text-decoration:none;display:flex;flex-direction:column">
+    <div class="stat-card-icon" style="background:rgba(212,175,100,.12)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="var(--gold)" stroke-width="1.75">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+        <path d="M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+    </div>
+    <div class="stat-card-number" style="color:var(--gold)">
+      <span style="display:inline-flex;align-items:center;gap:6px">
+        <?= (int)($scCounts['new'] ?? 0) ?>
+        <?php if (($scCounts['new'] ?? 0) > 0): ?>
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite"></span>
+        <?php endif; ?>
+      </span>
+    </div>
+    <div class="stat-card-label">Subcontractor Apps</div>
+  </a>
 
   <!-- 5. Activity Events -->
   <a href="/admin/activity.php" class="stat-card" style="text-decoration:none;display:flex;flex-direction:column">
@@ -375,6 +419,55 @@ require_once __DIR__ . '/includes/admin-header.php';
 
 </div>
 
+<!-- Section 4b: Recent Subcontractor Applications -->
+<div class="card" style="margin-top:1.5rem">
+  <div class="card-header">
+    <h2 class="card-title">
+      New Subcontractor Applications
+      <span style="color:var(--text-3);font-weight:400;font-size:.8125rem;margin-left:.5rem">(<?= (int)($scCounts['new'] ?? 0) ?>)</span>
+    </h2>
+    <a href="/admin/subcontractors.php" class="btn btn-ghost" style="font-size:.8125rem;white-space:nowrap">View All →</a>
+  </div>
+
+  <?php if (empty($recentSubcontractors)): ?>
+    <div class="card-body">
+      <div class="empty-state" style="padding:1.5rem 0">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.25" style="width:32px;height:32px">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+          <path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        <p style="font-size:.875rem">No new subcontractor applications.</p>
+      </div>
+    </div>
+  <?php else: ?>
+    <div style="display:flex;flex-direction:column">
+      <?php foreach ($recentSubcontractors as $idx => $sc):
+        $cName  = htmlspecialchars($sc['company_name'] ?? '—');
+        $pName  = htmlspecialchars(trim(($sc['first_name'] ?? '') . ' ' . ($sc['last_name'] ?? '')));
+        $cTrade = htmlspecialchars($sc['trade'] ?? '');
+        $cTime  = timeAgo($sc['created_at'] ?? '');
+      ?>
+        <?php if ($idx > 0): ?><div class="divider"></div><?php endif; ?>
+        <a href="/admin/subcontractors.php"
+           style="display:flex;flex-direction:column;gap:.25rem;padding:1rem 1.25rem;text-decoration:none;transition:background .15s"
+           onmouseover="this.style.background='rgba(255,255,255,.03)'"
+           onmouseout="this.style.background='transparent'">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem">
+            <span style="font-size:.875rem;font-weight:500;color:var(--text-1)"><?= $cName ?></span>
+            <span style="font-size:.75rem;color:var(--text-3);white-space:nowrap;flex-shrink:0"><?= $cTime ?></span>
+          </div>
+          <div style="display:flex;gap:.75rem;font-size:.75rem;color:var(--text-3)">
+            <?php if ($pName): ?><span><?= $pName ?></span><?php endif; ?>
+            <?php if ($cTrade): ?><span style="color:var(--gold)"><?= $cTrade ?></span><?php endif; ?>
+          </div>
+        </a>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
+</div>
+
 <!-- Section 5: Quick Links -->
 <div class="dash-quick-links" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.5rem">
 
@@ -442,6 +535,10 @@ require_once __DIR__ . '/includes/admin-header.php';
 
 <style>
 @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.3 } }
+
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr) !important; }
+}
 
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(3, 1fr) !important; }

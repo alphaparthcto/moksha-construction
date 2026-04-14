@@ -35,7 +35,7 @@ $extra_schemas = [
 ];
 
 // Featured projects for homepage
-$featuredStmt = $db->query('SELECT * FROM projects WHERE status = "published" ORDER BY sort_order ASC, created_at DESC LIMIT 3');
+$featuredStmt = $db->query('SELECT * FROM projects WHERE status = "published" AND featured = 1 ORDER BY sort_order ASC, created_at DESC LIMIT 3');
 $featuredProjects = $featuredStmt->fetchAll();
 
 require_once __DIR__ . '/includes/header.php';
@@ -199,7 +199,7 @@ require_once __DIR__ . '/includes/header.php';
       <!-- Card 1: General Contracting -->
       <a href="/services/general-contracting" class="service-card reveal reveal-delay-1" aria-label="General Contracting services">
         <img
-          src="/assets/images/services/drone-bim.webp"
+          src="/assets/images/services/general-contracting.webp"
           alt="Aerial view of a construction site managed by Moksha Construction"
           loading="lazy"
           width="800"
@@ -224,8 +224,8 @@ require_once __DIR__ . '/includes/header.php';
       <!-- Card 2: Construction Management -->
       <a href="/services/construction-management" class="service-card reveal reveal-delay-2" aria-label="Construction Management services">
         <img
-          src="/assets/images/services/trimble-gps.webp"
-          alt="Construction manager using GPS and digital tools on site"
+          src="/assets/images/services/construction-management.webp"
+          alt="Construction managers reviewing plans on site"
           loading="lazy"
           width="800"
           height="600"
@@ -272,8 +272,8 @@ require_once __DIR__ . '/includes/header.php';
       <!-- Card 4: Residential · Commercial · Industrial -->
       <a href="/services/residential-commercial-industrial" class="service-card reveal reveal-delay-4" aria-label="Residential, Commercial, and Industrial construction services">
         <img
-          src="/assets/images/services/commercial.webp"
-          alt="Large-scale commercial construction project by Moksha Construction"
+          src="/assets/images/services/residential-commercial.webp"
+          alt="Modern townhomes built by Moksha Construction"
           loading="lazy"
           width="800"
           height="600"
@@ -321,7 +321,7 @@ require_once __DIR__ . '/includes/header.php';
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible">
 
       <?php foreach ($featuredProjects as $i => $fp): ?>
-      <article class="project-card reveal reveal-delay-<?= $i + 1 ?>">
+      <a href="/projects/<?= htmlspecialchars($fp['slug']) ?>" class="project-card group reveal reveal-delay-<?= $i + 1 ?> block">
         <img
           src="<?= htmlspecialchars($fp['featured_image'] ?? '/assets/images/projects/placeholder.jpg') ?>"
           alt="<?= htmlspecialchars($fp['title']) ?> — <?= htmlspecialchars($fp['size'] ?? '') ?> <?= htmlspecialchars($fp['type']) ?> project<?= $fp['location'] ? ' in ' . htmlspecialchars($fp['location']) : '' ?>"
@@ -336,12 +336,12 @@ require_once __DIR__ . '/includes/header.php';
             <?= $fp['size'] ? htmlspecialchars($fp['size']) . ' · ' : '' ?>
             <?= htmlspecialchars($fp['location'] ?? '') ?>
           </p>
-          <a href="/projects/<?= htmlspecialchars($fp['slug']) ?>" class="btn-ghost text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="btn-ghost text-sm mt-3 max-h-0 overflow-hidden opacity-0 group-hover:max-h-12 group-hover:opacity-100 transition-all duration-300">
             View Project
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
+          </span>
         </div>
-      </article>
+      </a>
       <?php endforeach; ?>
 
       <?php if (empty($featuredProjects)): ?>
@@ -375,7 +375,7 @@ require_once __DIR__ . '/includes/header.php';
       <div class="relative reveal">
         <div class="rounded-[var(--radius-xl)] overflow-hidden aspect-[4/5]">
           <img
-            src="/assets/images/services/drone-bim.webp"
+            src="/assets/images/services/general-contracting.webp"
             alt="Moksha Construction team on a large-scale commercial project site"
             loading="lazy"
             width="700"
@@ -471,59 +471,33 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Partner Logo Row -->
-    <div class="flex flex-wrap items-center justify-center gap-10 lg:gap-16 reveal reveal-delay-2">
-
-      <!-- Lowe's -->
-      <a href="https://lowes.com" target="_blank" rel="noopener noreferrer" aria-label="Lowe's — Moksha Construction partner" class="group">
-        <img
-          src="/assets/images/partners/lowes.png"
-          alt="Lowe's"
-          loading="lazy"
-          width="120"
-          height="48"
-          class="h-10 w-auto object-contain brightness-0 invert opacity-80 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300"
+    <?php
+    $partnerLogos = [
+        ['name' => "Lowe's",                       'href' => 'https://lowes.com',          'src' => '/assets/images/partners/lowes.png'],
+        ['name' => 'Sherwin-Williams',             'href' => 'https://sherwin-williams.com','src' => '/assets/images/partners/sherwin-williams.png'],
+        ['name' => 'MSI Surfaces',                 'href' => 'https://msisurfaces.com',    'src' => '/assets/images/partners/msi.svg'],
+        ['name' => 'United Rentals',               'href' => 'https://unitedrentals.com',  'src' => '/assets/images/partners/united-rentals.svg'],
+        ['name' => 'Michael Graves',               'href' => 'https://michaelgraves.com',  'src' => '/assets/images/partners/michael-graves.svg'],
+        ['name' => 'ApeTech',                      'href' => 'https://apete.ch',           'src' => '/assets/images/partners/apetech.svg'],
+    ];
+    ?>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-5 items-stretch reveal reveal-delay-2">
+      <?php foreach ($partnerLogos as $p): ?>
+        <a
+          href="<?= htmlspecialchars($p['href']) ?>"
+          <?= $p['href'] !== '#' ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+          aria-label="<?= htmlspecialchars($p['name']) ?> — Moksha Construction partner"
+          class="partner-logo"
         >
-      </a>
-
-      <!-- Sherwin-Williams -->
-      <a href="https://sherwin-williams.com" target="_blank" rel="noopener noreferrer" aria-label="Sherwin-Williams — Moksha Construction partner" class="group">
-        <img
-          src="/assets/images/partners/sherwin-williams.png"
-          alt="Sherwin-Williams"
-          loading="lazy"
-          width="180"
-          height="48"
-          class="h-10 w-auto object-contain brightness-0 invert opacity-80 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300"
-        >
-      </a>
-
-      <!-- United Rentals -->
-      <a href="https://unitedrentals.com" target="_blank" rel="noopener noreferrer" aria-label="United Rentals — Moksha Construction partner" class="group">
-        <img
-          src="/assets/images/partners/united-rentals.svg"
-          alt="United Rentals"
-          loading="lazy"
-          width="180"
-          height="48"
-          class="h-10 w-auto object-contain brightness-0 invert opacity-80 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300"
-        >
-      </a>
-
-      <!-- Partner placeholder 4 -->
-      <div class="h-10 w-32 rounded bg-surface border border-[oklch(100%_0_0/0.06)] flex items-center justify-center opacity-30" aria-hidden="true">
-        <span class="text-text-4 text-xs tracking-wider">PARTNER</span>
-      </div>
-
-      <!-- Partner placeholder 5 -->
-      <div class="h-10 w-32 rounded bg-surface border border-[oklch(100%_0_0/0.06)] flex items-center justify-center opacity-30" aria-hidden="true">
-        <span class="text-text-4 text-xs tracking-wider">PARTNER</span>
-      </div>
-
-      <!-- Partner placeholder 6 -->
-      <div class="h-10 w-32 rounded bg-surface border border-[oklch(100%_0_0/0.06)] flex items-center justify-center opacity-30" aria-hidden="true">
-        <span class="text-text-4 text-xs tracking-wider">PARTNER</span>
-      </div>
-
+          <img
+            src="<?= htmlspecialchars($p['src']) ?>"
+            alt="<?= htmlspecialchars($p['name']) ?>"
+            loading="lazy"
+            width="180"
+            height="80"
+          >
+        </a>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
@@ -545,10 +519,10 @@ require_once __DIR__ . '/includes/header.php';
 
     <?php
     $team = [
-        ['name' => 'Rakesh Patel',  'role' => 'CEO',                'initials' => 'RP', 'image' => '/assets/images/team/rakesh-patel.jpg',     'bio' => 'Visionary leader with decades of experience in construction and real estate development across the Southeast.'],
-        ['name' => 'Parth Patel',   'role' => 'Managing Director',  'initials' => 'PP', 'image' => '/assets/images/team/parth-patel.jpg',      'bio' => 'Manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.'],
-        ['name' => 'Hari Patel',    'role' => 'CFO',                'initials' => 'HP', 'image' => '/assets/images/team/hari-patel.jpg',       'bio' => 'Coordinates day-to-day site operations, subcontractor scheduling, and quality control.'],
-        ['name' => 'Parth Patel',   'role' => 'CTO',                'initials' => 'PP', 'image' => '/assets/images/team/parth-patel-tech.jpg', 'bio' => 'Bridges construction and technology — BIM workflows, project management systems, and digital tools.'],
+        ['name' => 'Rakesh Patel',  'role' => 'Chief Executive Officer', 'initials' => 'RP', 'image' => '/assets/images/team/rakesh-patel.jpg',     'bio' => 'Visionary leader with decades of experience in construction and real estate development across the Southeast.'],
+        ['name' => 'Parth Patel',   'role' => 'Managing Director',       'initials' => 'PP', 'image' => '/assets/images/team/parth-patel.jpg',      'bio' => 'Manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.'],
+        ['name' => 'Hari Patel',    'role' => 'Chief Financial Officer', 'initials' => 'HP', 'image' => '/assets/images/team/hari-patel.jpg',       'bio' => 'Coordinates day-to-day site operations, subcontractor scheduling, and quality control.'],
+        ['name' => 'Parth Patel',   'role' => 'Chief Technology Officer', 'initials' => 'PP', 'image' => '/assets/images/team/parth-patel-tech.jpg', 'bio' => 'Bridges construction and technology — BIM workflows, project management systems, and digital tools.'],
     ];
     ?>
 
@@ -670,46 +644,13 @@ require_once __DIR__ . '/includes/header.php';
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-      <!-- Map Placeholder (left — spans 2 columns) -->
+      <!-- Interactive Leaflet Map (left — spans 2 columns) -->
       <div class="lg:col-span-2 reveal">
-        <div
-          class="w-full aspect-[16/9] rounded-[var(--radius-xl)] bg-surface border border-[oklch(100%_0_0/0.08)] overflow-hidden relative"
-          id="service-area-map"
-          aria-label="Map of Moksha Construction service areas across the Southeast United States"
-          role="img"
-        >
-          <!-- Placeholder map background -->
-          <div class="absolute inset-0 bg-gradient-to-br from-brand-950 to-base flex items-center justify-center">
-            <div class="text-center">
-              <svg class="w-12 h-12 text-accent-400/30 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/>
-              </svg>
-              <p class="text-text-4 text-sm">Interactive map loading</p>
-            </div>
-          </div>
-
-          <!-- State pin indicators -->
-          <div class="absolute inset-0 pointer-events-none">
-            <!-- Nashville pin -->
-            <div class="absolute" style="top: 35%; left: 52%;" aria-hidden="true">
-              <div class="relative">
-                <div class="w-3 h-3 rounded-full bg-accent-400 shadow-[0_0_8px_oklch(88%_0.24_97/0.6)]"></div>
-                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface border border-[oklch(100%_0_0/0.12)] rounded px-2 py-1 text-xs text-text whitespace-nowrap">Nashville</div>
-              </div>
-            </div>
-            <!-- Atlanta pin -->
-            <div class="absolute" style="top: 52%; left: 54%;" aria-hidden="true">
-              <div class="relative">
-                <div class="w-3 h-3 rounded-full bg-accent-400 shadow-[0_0_8px_oklch(88%_0.24_97/0.6)]"></div>
-                <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-surface border border-[oklch(100%_0_0/0.12)] rounded px-2 py-1 text-xs text-text whitespace-nowrap">Atlanta</div>
-              </div>
-            </div>
-            <!-- Texas indicator -->
-            <div class="absolute" style="top: 65%; left: 28%;" aria-hidden="true">
-              <div class="w-2.5 h-2.5 rounded-full bg-brand-500 opacity-70 shadow-[0_0_6px_oklch(46%_0.22_310/0.5)]"></div>
-            </div>
-          </div>
-        </div>
+        <?php $map_id = 'home-service-map'; $map_height = '460px'; require __DIR__ . '/includes/service-area-map.php'; ?>
+        <p class="mt-4 text-sm text-text-3">
+          <span class="text-accent-400 font-semibold uppercase tracking-wider text-xs mr-1">Also serving:</span>
+          Clarksville, TN | Murfreesboro, TN | Franklin, TN | Decatur, GA | and surrounding communities
+        </p>
       </div>
 
       <!-- Office Cards + Badge (right column) -->

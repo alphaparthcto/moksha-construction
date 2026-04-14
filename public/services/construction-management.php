@@ -43,7 +43,7 @@ require_once __DIR__ . '/../includes/header.php';
   <!-- Background photo -->
   <div class="absolute inset-0">
     <img
-      src="/assets/images/services/trimble-gps.webp"
+      src="/assets/images/services/construction-management.webp"
       alt="Construction manager reviewing project data on site with Trimble GPS equipment"
       class="w-full h-full object-cover"
       loading="eager"

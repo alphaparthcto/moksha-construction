@@ -43,7 +43,7 @@ require_once __DIR__ . '/../includes/header.php';
   <!-- Background photo -->
   <div class="absolute inset-0">
     <img
-      src="/assets/images/services/commercial.webp"
+      src="/assets/images/services/residential-commercial.webp"
       alt="Large-scale commercial construction project by Moksha Construction"
       class="w-full h-full object-cover"
       loading="eager"
@@ -113,7 +113,7 @@ require_once __DIR__ . '/../includes/header.php';
       <div class="reveal order-2 lg:order-1">
         <div class="relative rounded-[var(--radius-xl)] overflow-hidden aspect-[4/3]">
           <img
-            src="/assets/images/projects/residential/main.webp"
+            src="/assets/images/services/residential-commercial.webp"
             alt="Custom residential home built by Moksha Construction in Tennessee"
             class="w-full h-full object-cover"
             loading="lazy"

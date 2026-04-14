@@ -79,9 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
 $submissions = $db->query("
     SELECT * FROM contact_submissions
     WHERE status != 'deleted'
-    ORDER BY
-        CASE status WHEN 'new' THEN 0 WHEN 'resolved' THEN 1 END,
-        created_at DESC
+    ORDER BY created_at DESC
 ")->fetchAll();
 
 // ---- Stats ----
@@ -201,7 +199,6 @@ require_once __DIR__ . '/includes/admin-header.php';
             <th class="col-actions">Actions</th>
           </tr>
         </thead>
-        <tbody>
           <?php foreach ($submissions as $i => $sub):
             $sid        = (int)$sub['id'];
             $first      = htmlspecialchars($sub['first_name'] ?? '');
@@ -227,8 +224,9 @@ require_once __DIR__ . '/includes/admin-header.php';
             };
           ?>
 
+            <tbody x-data="{ open: false }">
             <!-- Main row -->
-            <tr x-data="{ open: false }" :class="open ? 'row-open' : ''">
+            <tr :class="open ? 'row-open' : ''">
 
               <!-- # -->
               <td class="col-num"><?= $i + 1 ?></td>
@@ -396,9 +394,9 @@ require_once __DIR__ . '/includes/admin-header.php';
                 </div>
               </td>
             </tr>
+            </tbody>
 
           <?php endforeach; ?>
-        </tbody>
       </table>
     </div>
   <?php endif; ?>

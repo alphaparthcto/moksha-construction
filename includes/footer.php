@@ -8,7 +8,7 @@
       <!-- Brand Column -->
       <div class="lg:col-span-1">
         <a href="/" aria-label="Moksha Construction Home">
-          <img src="/assets/images/branding/logo-full-color.svg" alt="Moksha Construction" class="h-12 w-auto mb-4" width="200" height="40" loading="lazy">
+          <img src="/assets/images/branding/logo-full-color.svg" alt="Moksha Construction" class="h-[76px] w-auto mb-4" width="266" height="76" loading="lazy">
         </a>
         <p class="text-text-3 text-sm leading-relaxed mt-3">Building legacies across the Southeast. Licensed in Tennessee, Texas & North Carolina.</p>
         <!-- Social Links -->
@@ -32,6 +32,7 @@
           <li><a href="/" class="text-sm text-text-2 hover:text-accent-400 transition-colors">Home</a></li>
           <li><a href="/about" class="text-sm text-text-2 hover:text-accent-400 transition-colors">About</a></li>
           <li><a href="/projects" class="text-sm text-text-2 hover:text-accent-400 transition-colors">Projects</a></li>
+          <li><a href="/subcontractors" class="text-sm text-text-2 hover:text-accent-400 transition-colors">Work With Us</a></li>
           <li><a href="/contact" class="text-sm text-text-2 hover:text-accent-400 transition-colors">Contact</a></li>
         </ul>
       </div>
@@ -84,7 +85,7 @@
         Licensed in TN · TX · NC &nbsp;|&nbsp; Expanding to GA · SC · FL
       </p>
       <p class="text-xs text-text-4">
-        &copy; <?= SITE_YEAR ?> <?= SITE_NAME ?> · Website by <a href="https://apetech.dev" target="_blank" rel="noopener" class="hover:text-accent-400 transition-colors">APETech</a>
+        &copy; <?= SITE_YEAR ?> <?= SITE_NAME ?> · Website by <a href="https://apete.ch" target="_blank" rel="noopener" class="hover:text-accent-400 transition-colors">APETech</a>
       </p>
     </div>
   </div>
@@ -92,5 +93,77 @@
 
 <!-- Scripts -->
 <script src="/assets/js/app.js?v=<?= ASSET_VERSION ?>" defer></script>
+
+<!-- Leaflet (lazy-loaded only when a .leaflet-map element exists) -->
+<script>
+  (function() {
+    if (!document.querySelector('.leaflet-map')) return;
+
+    // Inject Leaflet CSS
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
+    link.crossOrigin = '';
+    document.head.appendChild(link);
+
+    // Inject Leaflet JS
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
+    script.crossOrigin = '';
+    script.onload = initMoksaMaps;
+    document.head.appendChild(script);
+
+    function initMoksaMaps() {
+      var offices = [
+        { name: 'Nashville Office', address: '315 Deaderick Street, Suite 1550, Nashville, TN 37238', coords: [36.1659, -86.7844], primary: true },
+        { name: 'Atlanta Office', address: '1 W Court Square, Decatur, GA 30030', coords: [33.7748, -84.2963], primary: true }
+      ];
+
+      document.querySelectorAll('.leaflet-map').forEach(function(el) {
+        var map = L.map(el, {
+          scrollWheelZoom: false,
+          zoomControl: true,
+          attributionControl: false
+        });
+
+        // Carto Dark Matter — free dark tiles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          subdomains: 'abcd',
+          maxZoom: 19
+        }).addTo(map);
+
+        // Custom branded marker (gold accent dot with glow)
+        var goldIcon = L.divIcon({
+          className: 'moksha-pin',
+          html: '<span class="moksha-pin-dot"></span><span class="moksha-pin-pulse"></span>',
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        });
+        var primaryIcon = L.divIcon({
+          className: 'moksha-pin moksha-pin-primary',
+          html: '<span class="moksha-pin-dot"></span><span class="moksha-pin-pulse"></span>',
+          iconSize: [22, 22],
+          iconAnchor: [11, 11]
+        });
+
+        var bounds = [];
+        offices.forEach(function(o) {
+          var marker = L.marker(o.coords, { icon: o.primary ? primaryIcon : goldIcon }).addTo(map);
+          marker.bindPopup(
+            '<div class="moksha-popup"><strong>' + o.name + '</strong><br>' + o.address + '</div>'
+          );
+          bounds.push(o.coords);
+        });
+
+        map.fitBounds(bounds, { padding: [50, 50] });
+
+        // Tiny tap-to-enable scroll zoom hint
+        map.on('click', function() { map.scrollWheelZoom.enable(); });
+      });
+    }
+  })();
+</script>
 </body>
 </html>

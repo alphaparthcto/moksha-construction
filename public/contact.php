@@ -394,55 +394,15 @@ require_once __DIR__ . '/includes/header.php';
   </section>
 
   <!-- ============================================================
-       MAP SECTION (Full-width placeholder)
+       MAP SECTION — Interactive Leaflet
   ============================================================ -->
   <section class="bg-void border-t border-[oklch(100%_0_0/0.06)]">
-    <div
-      class="relative flex items-center justify-center overflow-hidden"
-      style="height: 400px;"
-      aria-label="Office locations map placeholder"
-    >
-      <!-- Dark map placeholder -->
-      <div class="absolute inset-0 bg-gradient-to-br from-brand-950 via-void to-base opacity-90"></div>
-
-      <!-- Grid lines for map texture -->
-      <div class="absolute inset-0 opacity-5"
-           style="background-image: linear-gradient(oklch(100% 0 0 / 1) 1px, transparent 1px), linear-gradient(90deg, oklch(100% 0 0 / 1) 1px, transparent 1px); background-size: 40px 40px;">
-      </div>
-
-      <!-- Office pin markers -->
-      <div class="absolute" style="top: 42%; left: 38%;">
-        <div class="relative flex flex-col items-center">
-          <div class="w-4 h-4 rounded-full bg-accent-400 shadow-[0_0_16px_oklch(88%_0.24_97/0.7)] animate-pulse"></div>
-          <div class="mt-1 bg-surface border border-[oklch(100%_0_0/0.10)] rounded-lg px-3 py-1.5 text-xs text-text-2 whitespace-nowrap shadow-lg">
-            Nashville, TN
-          </div>
-        </div>
-      </div>
-
-      <div class="absolute" style="top: 36%; left: 36%;">
-        <div class="relative flex flex-col items-center">
-          <div class="w-3.5 h-3.5 rounded-full bg-accent-400/80 shadow-[0_0_12px_oklch(88%_0.24_97/0.5)] animate-pulse" style="animation-delay: 0.3s;"></div>
-          <div class="mt-1 bg-surface border border-[oklch(100%_0_0/0.10)] rounded-lg px-3 py-1.5 text-xs text-text-2 whitespace-nowrap shadow-lg">
-            Clarksville, TN
-          </div>
-        </div>
-      </div>
-
-      <div class="absolute" style="top: 56%; left: 44%;">
-        <div class="relative flex flex-col items-center">
-          <div class="w-3.5 h-3.5 rounded-full bg-brand-400 shadow-[0_0_12px_oklch(62%_0.22_310/0.6)] animate-pulse" style="animation-delay: 0.6s;"></div>
-          <div class="mt-1 bg-surface border border-[oklch(100%_0_0/0.10)] rounded-lg px-3 py-1.5 text-xs text-text-2 whitespace-nowrap shadow-lg">
-            Atlanta, GA
-          </div>
-        </div>
-      </div>
-
-      <!-- Center label -->
-      <div class="relative text-center">
-        <p class="text-text-4 text-sm">Interactive map — coming soon</p>
-        <p class="text-text-4 text-xs mt-1">Nashville &middot; Clarksville &middot; Atlanta</p>
-      </div>
+    <?php $map_id = 'contact-service-map'; $map_height = '460px'; require __DIR__ . '/includes/service-area-map.php'; ?>
+    <div class="max-w-[var(--container)] mx-auto px-6 py-5 text-center">
+      <p class="text-sm text-text-3">
+        <span class="text-accent-400 font-semibold uppercase tracking-wider text-xs mr-1">Also serving:</span>
+        Clarksville, TN | Murfreesboro, TN | Franklin, TN | Decatur, GA | and surrounding communities
+      </p>
     </div>
   </section>
 

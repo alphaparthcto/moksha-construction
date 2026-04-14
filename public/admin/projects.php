@@ -46,6 +46,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_status'])) {
     exit;
 }
 
+// ---- POST: Toggle featured ----
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_featured'])) {
+    if (!hash_equals($csrf, $_POST['csrf_token'] ?? '')) {
+        $_SESSION['flash_error'] = 'Invalid security token.';
+        header('Location: /admin/projects.php');
+        exit;
+    }
+    $pid     = (int) ($_POST['project_id'] ?? 0);
+    $current = (int) ($_POST['current_featured'] ?? 0);
+    if ($pid > 0) {
+        $titleStmt = $db->prepare("SELECT title FROM projects WHERE id = ?");
+        $titleStmt->execute([$pid]);
+        $title = $titleStmt->fetchColumn() ?: 'Unknown';
+
+        if ($current) {
+            // Un-feature
+            $db->prepare("UPDATE projects SET featured = 0 WHERE id = ?")->execute([$pid]);
+            logActivity($db, 'project_unfeature', "Removed \"{$title}\" from homepage");
+            $_SESSION['flash_success'] = '<strong>' . htmlspecialchars($title) . '</strong> removed from homepage.';
+        } else {
+            // Check max 3
+            $count = (int) $db->query("SELECT COUNT(*) FROM projects WHERE featured = 1")->fetchColumn();
+            if ($count >= 3) {
+                $_SESSION['flash_error'] = 'Already 3 featured projects. Remove one first.';
+            } else {
+                $db->prepare("UPDATE projects SET featured = 1 WHERE id = ?")->execute([$pid]);
+                logActivity($db, 'project_feature', "Added \"{$title}\" to homepage");
+                $_SESSION['flash_success'] = '<strong>' . htmlspecialchars($title) . '</strong> added to homepage.';
+            }
+        }
+    }
+    header('Location: /admin/projects.php');
+    exit;
+}
+
 // ---- POST: Delete project ----
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_project'])) {
     if (!hash_equals($csrf, $_POST['csrf_token'] ?? '')) {
@@ -82,7 +117,7 @@ $counts = $db->query("
 
 // ---- Data: all projects ----
 $projects = $db->query("
-    SELECT id, title, slug, type, status, sort_order, created_at
+    SELECT id, title, slug, type, status, featured, sort_order, created_at
     FROM projects ORDER BY sort_order ASC, created_at DESC
 ")->fetchAll();
 
@@ -235,6 +270,7 @@ require_once __DIR__ . '/includes/admin-header.php';
             <th>Title</th>
             <th>Type</th>
             <th>Status</th>
+            <th style="text-align:center">Homepage</th>
             <th class="col-date">Date</th>
             <th class="col-actions">Actions</th>
           </tr>
@@ -244,9 +280,10 @@ require_once __DIR__ . '/includes/admin-header.php';
             $slug   = htmlspecialchars($project['slug'] ?? '');
             $title  = htmlspecialchars($project['title'] ?? 'Untitled');
             $type   = htmlspecialchars($project['type'] ?? '');
-            $status = $project['status'] ?? 'draft';
-            $pid    = (int) $project['id'];
-            $sort   = (int) ($project['sort_order'] ?? 0);
+            $status   = $project['status'] ?? 'draft';
+            $featured = (int) ($project['featured'] ?? 0);
+            $pid      = (int) $project['id'];
+            $sort     = (int) ($project['sort_order'] ?? 0);
 
             // Date: relative for recent items (< 7 days), absolute otherwise
             $rawDate = $project['created_at'] ?? '';
@@ -288,6 +325,26 @@ require_once __DIR__ . '/includes/admin-header.php';
             </td>
 
             <td><?= $status_badge ?></td>
+
+            <td style="text-align:center">
+              <form method="post" action="/admin/projects.php" style="display:inline">
+                <input type="hidden" name="csrf_token"        value="<?= htmlspecialchars($csrf) ?>">
+                <input type="hidden" name="toggle_featured"   value="1">
+                <input type="hidden" name="project_id"        value="<?= $pid ?>">
+                <input type="hidden" name="current_featured"  value="<?= $featured ?>">
+                <button type="submit" class="btn-icon" title="<?= $featured ? 'Remove from homepage' : 'Show on homepage' ?>" style="color:<?= $featured ? 'var(--gold)' : 'var(--text-4)' ?>">
+                  <?php if ($featured): ?>
+                    <svg fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  <?php else: ?>
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:18px;height:18px">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  <?php endif; ?>
+                </button>
+              </form>
+            </td>
 
             <td class="col-date"><?= $date ?></td>
 

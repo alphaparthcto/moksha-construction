@@ -30,7 +30,7 @@ define('OFFICE_ATLANTA', [
 ]);
 
 // Social links (update with real URLs from client)
-define('SOCIAL_INSTAGRAM', 'https://instagram.com/mokshaconstruction');
+define('SOCIAL_INSTAGRAM', 'https://www.instagram.com/moksha.construction');
 define('SOCIAL_FACEBOOK', 'https://facebook.com/mokshaconstruction');
 define('SOCIAL_LINKEDIN', 'https://linkedin.com/company/moksha-construction');
 
@@ -44,4 +44,4 @@ define('DB_USER', 'parths5_moksha');
 define('DB_PASS', '95GAsiK4ghpaMoJ8oHql');
 
 // Asset versioning for cache busting
-define('ASSET_VERSION', '1.0.3');
+define('ASSET_VERSION', '1.2.3');

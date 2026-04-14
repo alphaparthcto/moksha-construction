@@ -43,7 +43,7 @@ require_once __DIR__ . '/../includes/header.php';
   <!-- Background photo -->
   <div class="absolute inset-0">
     <img
-      src="/assets/images/services/drone-bim.webp"
+      src="/assets/images/services/general-contracting.webp"
       alt="Aerial view of a construction site managed by Moksha Construction"
       class="w-full h-full object-cover"
       loading="eager"

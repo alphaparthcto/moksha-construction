@@ -16,5 +16,8 @@
       <a href="/contact#quote" class="btn-primary">Get a Free Quote <span aria-hidden="true">→</span></a>
       <a href="tel:<?= SITE_PHONE_RAW ?>" class="btn-secondary">Call <?= SITE_PHONE ?></a>
     </div>
+    <p class="mt-6 text-sm text-text-3 reveal reveal-delay-2">
+      A subcontractor? <a href="/subcontractors" class="text-accent-400 hover:text-accent-300 underline underline-offset-4 transition-colors">Apply to work with us &rarr;</a>
+    </p>
   </div>
 </section>
