@@ -168,14 +168,14 @@ require_once __DIR__ . '/includes/header.php';
               'role'     => 'Managing Director',
               'initials' => 'PP',
               'image'    => '/assets/images/team/parth-patel.jpg',
-              'bio'      => 'From 280,000 sq ft exhibition centers to luxury hotels, Parth manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.',
+              'bio'      => 'Oversees overall company operations, setting strategic direction and driving growth across all construction activities. Leads business development, secures new projects, and maintains key relationships with clients, developers, and subcontractors. Works closely with the executive team to ensure projects are delivered on time, within budget, and to the highest quality standards while expanding the company\'s market presence.',
           ],
           [
               'name'     => 'Hari Patel',
               'role'     => 'Chief Financial Officer',
               'initials' => 'HP',
               'image'    => '/assets/images/team/hari-patel.jpg',
-              'bio'      => 'A rising force on the Moksha team, Hari coordinates day-to-day site operations, subcontractor scheduling, and quality control across active projects.',
+              'bio'      => 'Serves as a key member of the executive leadership team, guiding the company\'s financial strategy and decision-making. Oversees budgeting, job costing, cash flow, and financial reporting across all construction projects. Partners with leadership and project teams to manage costs, control risk, and maintain profitability, while supporting long-term growth, financing, and investment planning.',
           ],
           [
               'name'     => 'Parth Patel',

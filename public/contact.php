@@ -100,7 +100,7 @@ require_once __DIR__ . '/includes/header.php';
                   id="first_name"
                   name="first_name"
                   x-model="form.first_name"
-                  placeholder="Parth"
+                  placeholder="John"
                   required
                   autocomplete="given-name"
                   class="form-input"
@@ -115,7 +115,7 @@ require_once __DIR__ . '/includes/header.php';
                   id="last_name"
                   name="last_name"
                   x-model="form.last_name"
-                  placeholder="Patel"
+                  placeholder="Doe"
                   required
                   autocomplete="family-name"
                   class="form-input"

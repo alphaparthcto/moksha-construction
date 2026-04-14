@@ -520,8 +520,8 @@ require_once __DIR__ . '/includes/header.php';
     <?php
     $team = [
         ['name' => 'Rakesh Patel',  'role' => 'Chief Executive Officer', 'initials' => 'RP', 'image' => '/assets/images/team/rakesh-patel.jpg',     'bio' => 'Visionary leader with decades of experience in construction and real estate development across the Southeast.'],
-        ['name' => 'Parth Patel',   'role' => 'Managing Director',       'initials' => 'PP', 'image' => '/assets/images/team/parth-patel.jpg',      'bio' => 'Manages Moksha\'s most complex builds with meticulous attention to timeline, budget, and quality.'],
-        ['name' => 'Hari Patel',    'role' => 'Chief Financial Officer', 'initials' => 'HP', 'image' => '/assets/images/team/hari-patel.jpg',       'bio' => 'Coordinates day-to-day site operations, subcontractor scheduling, and quality control.'],
+        ['name' => 'Parth Patel',   'role' => 'Managing Director',       'initials' => 'PP', 'image' => '/assets/images/team/parth-patel.jpg',      'bio' => 'Oversees overall company operations, setting strategic direction and driving growth across all construction activities.'],
+        ['name' => 'Hari Patel',    'role' => 'Chief Financial Officer', 'initials' => 'HP', 'image' => '/assets/images/team/hari-patel.jpg',       'bio' => 'Guides the company\'s financial strategy, overseeing budgeting, job costing, and financial reporting across all projects.'],
         ['name' => 'Parth Patel',   'role' => 'Chief Technology Officer', 'initials' => 'PP', 'image' => '/assets/images/team/parth-patel-tech.jpg', 'bio' => 'Bridges construction and technology — BIM workflows, project management systems, and digital tools.'],
     ];
     ?>
