@@ -8,7 +8,7 @@
       <!-- Brand Column -->
       <div class="lg:col-span-1">
         <a href="/" aria-label="Moksha Construction Home">
-          <img src="/assets/images/branding/logo-full-color.svg" alt="Moksha Construction" class="h-[76px] w-auto mb-4" width="266" height="76" loading="lazy">
+          <img src="/assets/images/branding/logo-full-color.png" alt="Moksha Construction" class="h-[76px] w-auto mb-4" width="266" height="76" loading="lazy">
         </a>
         <p class="text-text-3 text-sm leading-relaxed mt-3">Building legacies across the Southeast. Licensed in Tennessee, Texas & North Carolina.</p>
         <!-- Social Links -->
